@@ -291,7 +291,6 @@ body {
     display: flex;
     flex-direction: column;
     width: 100px;
-    height: 100%;
 
     button {
         margin: 0;

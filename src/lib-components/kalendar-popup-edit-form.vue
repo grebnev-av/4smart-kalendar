@@ -61,7 +61,8 @@
             </li>
           </ul>
           <div class="b-open-lesson">
-            <button>Открыть урок</button> https://4smart.pro/4fx-dko-dl5
+            <button>Открыть урок</button>
+            <span>https://4smart.pro/4fx-dko-dl5</span>
           </div>
         </template>
         <base-select

@@ -90,11 +90,11 @@ html {
             opacity: 1;
             border-bottom: solid 1px rgba(0, 0, 0, 0.03);
             font-size: 14px;
-            padding: 5px 10px;
+            padding: 3px 10px;
 
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
         }
 
@@ -102,8 +102,9 @@ html {
             color: var(--main-color);
             background-color: #7AFFD7;
             font-size: 12px;
-            padding: 5px 10px;
+            padding: 3px 10px 2px;
             border-radius: 6px;
+            justify-content: center;
             align-items: flex-start;
             .time {
                 color: var(--main-color);
@@ -357,15 +358,15 @@ html {
 
 .hour-indicator-line {
     position: absolute;
-    z-index: 10;
-    width: 106%;
+    z-index: 11;
+    width: 100%;
     height: 10px;
     display: flex;
     align-items: center;
     pointer-events: none;
     user-select: none;
 
-    margin: 0 0 0 -10px;
+    margin: 0 0 0 -1px;
 
     > span.line {
         background-color: var(--main-color);

@@ -144,7 +144,10 @@ export default {
           this.editing = false;
           this.$kalendar.closePopups()
           this.$kalendar.toggleEditPopup(false)
-          this.popper.destroy()
+
+          if (this.popper) {
+            this.popper.destroy()
+          }
         },
         createPopup() {
           const popcorn = this.$refs['target'];

@@ -40,7 +40,8 @@
           </li>
         </ul>
         <div class="b-open-lesson">
-          <button>Открыть урок</button> https://4smart.pro/4fx-dko-dl5
+          <button>Открыть урок</button>
+          <span>https://4smart.pro/4fx-dko-dl5</span>
         </div>
       </template>
       <base-select
@@ -435,6 +436,10 @@ export default {
     cursor: pointer;
     border: none;
     background: transparent;
+    margin: 0 5px;
+  }
+  & > span {
+    padding: 2px 0;
   }
 }
 .b-buttons {
