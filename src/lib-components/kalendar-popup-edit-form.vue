@@ -60,10 +60,7 @@
               {{ student.name }}
             </li>
           </ul>
-          <div class="b-open-lesson">
-            <button>Открыть урок</button>
-            <span>https://4smart.pro/4fx-dko-dl5</span>
-          </div>
+          <kalendar-open-lesson />
         </template>
         <base-select
             v-else
@@ -154,9 +151,7 @@
 			      {{ formatDate(end_time) }}
           </span>
         </div>
-        <div class="b-open-edit-lesson">
-          <button>Открыть урок</button> https://4smart.pro/4fx-dko-dl5
-        </div>
+        <kalendar-open-lesson />
         <div class="b-before-time" v-if="beforeTime[0] > 0 || beforeTime[1] > 0">
           <svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.1111 7.51191C17.1111 5.96162 16.4673 4.47481 15.3212 3.37859C14.1752 2.28236 12.6208 1.6665 11 1.6665C9.37923 1.6665 7.82485 2.28236 6.67879 3.37859C5.53274 4.47481 4.88889 5.96162 4.88889 7.51191C4.88889 12.267 2.99823 14.6538 1.85347 15.6632C1.65568 15.8376 1.79337 16.28 2.05706 16.28H7.2351C7.35207 16.28 7.45419 16.3608 7.48974 16.4723C7.6956 17.1176 8.54266 19.1665 11 19.1665C13.4573 19.1665 14.3044 17.1176 14.5103 16.4723C14.5458 16.3608 14.6479 16.28 14.7649 16.28H19.9429C20.2066 16.28 20.3443 15.8376 20.1465 15.6632C19.0018 14.6538 17.1111 12.267 17.1111 7.51191Z" stroke="#6E7191" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -184,6 +179,7 @@
 
 <script>
 import KalendarXButton from '@/lib-components/kalendar-x-button';
+import KalendarOpenLesson from '@/lib-components/kalendar-open-lesson';
 import BaseSelect from '@/lib-components/base/BaseSelect';
 import hourUtils from "./hours.js";
 import {
@@ -229,6 +225,7 @@ export default {
   name: "kalendar-popup-edit-form",
   components: {
     KalendarXButton,
+    KalendarOpenLesson,
     BaseSelect
   },
   props: ['popup_information'],

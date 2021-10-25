@@ -39,10 +39,7 @@
             {{ student.name }}
           </li>
         </ul>
-        <div class="b-open-lesson">
-          <button>Открыть урок</button>
-          <span>https://4smart.pro/4fx-dko-dl5</span>
-        </div>
+        <kalendar-open-lesson />
       </template>
       <base-select
           v-else
@@ -120,6 +117,7 @@
 
 <script>
 import KalendarXButton from '@/lib-components/kalendar-x-button';
+import KalendarOpenLesson from '@/lib-components/kalendar-open-lesson';
 import BaseSelect from '@/lib-components/base/BaseSelect'
 
 import {
@@ -165,6 +163,7 @@ export default {
   name: "kalendar-popup-card-slot",
   components: {
     KalendarXButton,
+    KalendarOpenLesson,
     BaseSelect
   },
   props: ['popup_information'],
@@ -424,24 +423,7 @@ export default {
     }
   }
 }
-.b-open-lesson {
-  width: 100%;
-  color: #777777;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
-  & > button {
-    color: #2089FF;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    margin: 0 5px;
-  }
-  & > span {
-    padding: 2px 0;
-  }
-}
+
 .b-buttons {
   width: 100%;
   display: flex;
