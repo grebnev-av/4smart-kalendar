@@ -210,15 +210,16 @@ export default {
       return this.addedStudents.length > 0 && !this.errorSelectedTime
     },
     errorSelectedTime () {
-      return this.end_time_h - this.start_time_h < 0
+      const endTimeH = this.end_time_h === 0 ? 2400 : this.end_time_h
+      return endTimeH - this.start_time_h < 0
     }
   },
   created () {
-    const { start_time, end_time, data, day_events } =  cloneObject(this.popup_information)
+    const { start_time, end_time, day_events } =  cloneObject(this.popup_information)
     this.start_time = start_time;
     this.start_time_h = this.getNumHour(this.start_time);
     this.end_time = end_time;
-    this.end_time_h = this.getNumHour(this.end_time);
+    this.end_time_h = this.getNumHour(this.end_time, 'end');
     this.day_events = day_events;
   },
   mounted () {
@@ -314,6 +315,10 @@ export default {
       this[`${timeName}_time`] = getLocaleTime(newDate.toISOString()) // this.startTime or this.endTime
       this[`${timeName}_time_h`] = +dataTime[0] * 100
 
+      if (timeName === 'end' && this[`${timeName}_time_h`] === 0) { // если конец события в 00:00
+        this[`${timeName}_time_h`] = 2400
+      }
+
       this.filterTimes()
 
       if (this.start_time_h > this.end_time_h) { // если при переключении выбрали время начала больше конца
@@ -351,11 +356,15 @@ export default {
           return false
         }
 
-        if (prop === 'start' && numHour10 === this.getNumHour(this.end_time)) {
+        if (prop === 'start' && numHour10 === this.getNumHour(this.end_time, 'end')) {
           return false
         }
 
-        if (prop === 'end' && numHour10 <= this.getNumHour(this.start_time)) {
+        if (prop === 'end' && numHour10 < this.getNumHour(this.start_time)) {
+          return false
+        }
+
+        if (prop === 'end' && h.indexOf('00:00:00') !== -1) {
           return false
         }
 
@@ -371,8 +380,14 @@ export default {
 
       return { name: time, value: time}
     },
-    getNumHour (time) {
-      return +time.slice(11, 16).replace(':','') // 2021-10-22T18:00:00+03:00 => 1800
+    getNumHour (time, prop) {
+      let numHour = +time.slice(11, 16).replace(':','') // 2021-10-22T18:00:00+03:00 => 1800
+
+      if (prop === 'end' && numHour === 0) { // если конец события в 00:00
+        numHour = 2400
+      }
+
+      return numHour
     }
   }
 }

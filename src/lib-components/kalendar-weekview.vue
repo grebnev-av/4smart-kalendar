@@ -1,5 +1,7 @@
 <template>
-  <div class="calendar-wrap" :style="`--space-between-cols: ${colsSpace}`">
+  <div class="calendar-wrap"
+    :style="`--space-between-cols: ${colsSpace}`"
+  >
     <div class="sticky-top">
       <ul class="days">
         <li
@@ -37,47 +39,52 @@
         ></li>
       </ul>
     </div>
-    <div class="blocks" v-if="hours">
-      <div class="calendar-blocks">
-        <ul class="hours">
-          <li
-            class="hour-row-identifier"
-            :key="index"
-            v-for="(hour, index) in hoursVisible"
-            :style="`height:${hourHeight}px`"
-          >
-            <span>
-              {{ kalendar_options.formatLeftHours(hour.value) }}
-            </span>
-          </li>
-        </ul>
-        <div
-          v-show="kalendar_options.style !== 'material_design'"
-          class="hour-indicator-line"
-          :style="`top:${passedTime.distance}px`"
-        >
-          <span class="time-value">{{ passedTime.value }}</span>
-          <span class="line"></span>
+    <div class="b-scroll-container" :style="{ height: kalendar_options.height }">
+      <base-scroll-container>
+        <div class="blocks" v-if="hours">
+          <div class="calendar-blocks">
+            <ul class="hours">
+              <li
+                class="hour-row-identifier"
+                :key="index"
+                v-for="(hour, index) in hoursVisible"
+                :style="`height:${hourHeight}px`"
+              >
+                <span>
+                  {{ kalendar_options.formatLeftHours(hour.value) }}
+                </span>
+              </li>
+            </ul>
+            <div
+              v-show="kalendar_options.style !== 'material_design'"
+              class="hour-indicator-line"
+              :style="`top:${passedTime.distance}px`"
+            >
+              <span class="time-value">{{ passedTime.value }}</span>
+              <span class="line"></span>
+            </div>
+            <kalendar-day
+              :day="day"
+              class="building-blocks"
+              :class="`day-${index + 1}`"
+              :key="day.value.slice(0, 10)"
+              v-for="(day, index) in days"
+              :passed-time="passedTime.distance"
+              :ref="day.value.slice(0, 10)"
+              :kalendar_events="kalendar_events"
+              :kalendar_work_hours="kalendar_work_hours"
+              :isEditing="isEditing"
+              :isShowEditPopup="isShowEditPopup"
+            >
+            </kalendar-day>
+          </div>
         </div>
-        <kalendar-day
-          :day="day"
-          class="building-blocks"
-          :class="`day-${index + 1}`"
-          :key="day.value.slice(0, 10)"
-          v-for="(day, index) in days"
-          :passed-time="passedTime.distance"
-          :ref="day.value.slice(0, 10)"
-          :kalendar_events="kalendar_events"
-          :kalendar_work_hours="kalendar_work_hours"
-          :isEditing="isEditing"
-          :isShowEditPopup="isShowEditPopup"
-        >
-        </kalendar-day>
-      </div>
+      </base-scroll-container>
     </div>
   </div>
 </template>
 <script>
+import BaseScrollContainer from "./base/BaseScrollContainer";
 import KalendarDay from "./kalendar-day.vue";
 import myWorker from "@/lib-components/workers";
 import {
@@ -117,7 +124,8 @@ export default {
     }
   },
   components: {
-    KalendarDay
+    KalendarDay,
+    BaseScrollContainer
   },
   created() {
     this.addHelperMethods();
@@ -273,12 +281,9 @@ $border-color: transparent;
 $theme-color: #e5e5e5;
 
 .calendar-wrap {
-  display: flex;
-  flex-direction: column;
-
   ul {
     list-style: none;
-    padding: 0px;
+    padding: 0;
 
     > li {
       display: flex;
@@ -293,7 +298,7 @@ $theme-color: #e5e5e5;
   background: #fff;
 
   .days {
-    margin: 0px;
+    margin: 0;
     display: flex;
     margin-left: 55px;
 
@@ -386,16 +391,15 @@ $theme-color: #e5e5e5;
 .blocks {
   display: flex;
   position: relative;
-  height: 100%;
 
   ul {
-    margin-top: 0px;
+    margin-top: 0;
   }
 
   .building-blocks {
     flex: 1;
     margin-right: var(--space-between-cols);
-    margin-bottom: 0px;
+    margin-bottom: 0;
     display: flex;
     flex-direction: column;
   }

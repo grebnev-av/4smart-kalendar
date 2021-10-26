@@ -105,17 +105,14 @@
         </div>
 
         <kalendar-monthview v-if="kalendar_options.view_type === 'month'" :current_day="current_day" />
-        <div v-else class="b-scroll-container" :style="{ height: kalendar_options.height }">
-            <scroll-container>
-                <kalendar-week-view
-                  :kalendar_work_hours="kalendar_work_hours"
-                  :current_day="current_day"
-                  :kalendar_events="kalendar_events"
-                  :isEditing="isEditing"
-                  :isShowEditPopup="isShowEditPopup"
-                />
-            </scroll-container>
-        </div>
+        <kalendar-week-view
+            v-else
+            :kalendar_work_hours="kalendar_work_hours"
+            :current_day="current_day"
+            :kalendar_events="kalendar_events"
+            :isEditing="isEditing"
+            :isShowEditPopup="isShowEditPopup"
+        />
 
         <portal to="event-creation" class="slotable">
             <div slot-scope="information" class="creating-event">
@@ -188,7 +185,7 @@ import {
 export default {
     components: {
       KalendarMonthview: () => import('./kalendar-monthview.vue'),
-        KalendarWeekView: () => import('./kalendar-weekview.vue'),ScrollContainer: () => import('./scroll-container.vue'),
+      KalendarWeekView: () => import('./kalendar-weekview.vue'),
       KalendarCreatedCardSlot,
       KalendarPopupCardSlot,
       KalendarPopupEditForm
@@ -223,9 +220,9 @@ export default {
         return {
             current_day: getHourlessDate(),
             default_options: {
-                cell_height: 10,
+                cell_height: 30,
                 scrollToNow: false,
-                height: 'calc(100vh - 100px)',
+                height: 'calc(100vh - 200px)',
                 start_day: getHourlessDate(),
                 view_type: 'week',
                 style: 'material_design',

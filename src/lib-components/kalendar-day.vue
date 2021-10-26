@@ -1,6 +1,5 @@
 <template>
   <ul
-    style="position: relative;"
     :class="{
       'is-weekend': isWeekend,
       'is-today': isToday,

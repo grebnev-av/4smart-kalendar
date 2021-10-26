@@ -111,7 +111,7 @@ export default {
 				military_time: false,
 				working_hours: false,
 				read_only: false,
-				day_starts_at: 0,
+				day_starts_at: 8,
 				day_ends_at: 24,
 				overlap: false, // перекрытие событий
 				hide_dates: ['2019-08-09'],

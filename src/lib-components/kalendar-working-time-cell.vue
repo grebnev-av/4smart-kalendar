@@ -83,6 +83,7 @@ ul.building-blocks {
             color: var(--main-color);
             user-select: none;
             font-weight: bold;
+            background: #ffffe4;
         }
 
         &.first_of_appointment {
