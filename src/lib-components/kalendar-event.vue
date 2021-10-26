@@ -153,12 +153,12 @@ export default {
           const popcorn = this.$refs['target'];
           const tooltip = this.$refs['popup'];
           this.popper = createPopper(popcorn, tooltip, {
-            placement: 'right',
+            placement: 'right-start',
             modifiers: [
               {
                 name: 'flip',
                 options: {
-                  fallbackPlacements: ['top', 'right', 'bottom', 'left'],
+                  fallbackPlacements: ['top-start', 'right-start', 'bottom-start', 'left-start'],
                 },
               },
             ],
