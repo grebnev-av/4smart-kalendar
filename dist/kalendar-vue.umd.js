@@ -1022,20 +1022,20 @@ var script$5 = {
       return this.addedStudents.length > 0 && !this.errorSelectedTime;
     },
     errorSelectedTime: function errorSelectedTime() {
-      return this.end_time_h - this.start_time_h < 0;
+      var endTimeH = this.end_time_h === 0 ? 2400 : this.end_time_h;
+      return endTimeH - this.start_time_h < 0;
     }
   },
   created: function created() {
     var _cloneObject = cloneObject(this.popup_information),
         start_time = _cloneObject.start_time,
         end_time = _cloneObject.end_time,
-        data = _cloneObject.data,
         day_events = _cloneObject.day_events;
 
     this.start_time = start_time;
     this.start_time_h = this.getNumHour(this.start_time);
     this.end_time = end_time;
-    this.end_time_h = this.getNumHour(this.end_time);
+    this.end_time_h = this.getNumHour(this.end_time, 'end');
     this.day_events = day_events;
   },
   mounted: function mounted() {
@@ -1135,6 +1135,12 @@ var script$5 = {
       this["".concat(timeName, "_time")] = getLocaleTime(newDate.toISOString()); // this.startTime or this.endTime
 
       this["".concat(timeName, "_time_h")] = +dataTime[0] * 100;
+
+      if (timeName === 'end' && this["".concat(timeName, "_time_h")] === 0) {
+        // если конец события в 00:00
+        this["".concat(timeName, "_time_h")] = 2400;
+      }
+
       this.filterTimes();
 
       if (this.start_time_h > this.end_time_h) {
@@ -1176,11 +1182,15 @@ var script$5 = {
           return false;
         }
 
-        if (prop === 'start' && numHour10 === _this3.getNumHour(_this3.end_time)) {
+        if (prop === 'start' && numHour10 === _this3.getNumHour(_this3.end_time, 'end')) {
           return false;
         }
 
-        if (prop === 'end' && numHour10 <= _this3.getNumHour(_this3.start_time)) {
+        if (prop === 'end' && numHour10 < _this3.getNumHour(_this3.start_time)) {
+          return false;
+        }
+
+        if (prop === 'end' && h.indexOf('00:00:00') !== -1) {
           return false;
         }
 
@@ -1200,8 +1210,15 @@ var script$5 = {
         value: time
       };
     },
-    getNumHour: function getNumHour(time) {
-      return +time.slice(11, 16).replace(':', ''); // 2021-10-22T18:00:00+03:00 => 1800
+    getNumHour: function getNumHour(time, prop) {
+      var numHour = +time.slice(11, 16).replace(':', ''); // 2021-10-22T18:00:00+03:00 => 1800
+
+      if (prop === 'end' && numHour === 0) {
+        // если конец события в 00:00
+        numHour = 2400;
+      }
+
+      return numHour;
     }
   }
 };/* script */
@@ -1472,7 +1489,7 @@ var __vue_staticRenderFns__$5 = [];
 
 var __vue_inject_styles__$5 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-9bd91d66_0", {
+  inject("data-v-95bc6040_0", {
     source: ".created-card{display:flex;flex-direction:column;padding:20px 20px 10px 30px;position:relative}.created-card__x{position:absolute;top:0;right:0}.created-card__header{display:flex;align-items:center;margin:0 0 20px 0}.created-card__header-icon{display:inline-block;width:20px;height:20px;margin:0 10px 0 0}.created-card__header-text{font-size:16px;font-weight:600;color:#0967d1;text-transform:uppercase}.b-added-students{display:flex;flex-wrap:wrap;margin:10px 0 0 10px!important}.b-added-students__item{border-right:none!important;margin:0 20px 0 0}.b-added-students__item-x{width:8px;height:8px;display:inline-block;margin:0 7px 0 0;cursor:pointer}.b-buttons{width:100%;display:flex;justify-content:center;margin:10px 0}.b-date-time{display:flex;align-items:center;flex-wrap:nowrap;padding:20px 0}.b-date-time__date{display:inline-block;margin:0 30px 0 0}.b-date-time__date:first-letter{text-transform:uppercase}.b-delimiter{width:50px;display:flex;justify-content:center;align-items:center}.b-delimiter:before{content:\"\";display:inline-block;border-bottom:1px solid #dadada;width:10px}.b-materials__add-button{color:#2089ff;display:flex;align-items:center;background:0 0;border:none;cursor:pointer}.b-materials__add-button>svg{margin:0 9px 0 0}.b-materials__list{display:flex;flex-direction:column;margin:10px 0 0 10px!important}.b-materials__list-item{border-right:none!important;margin:0 20px 0 0}.b-materials__list-item-x{width:8px;height:8px;display:inline-block;margin:0 7px 0 0;cursor:pointer}",
     map: undefined,
     media: undefined
@@ -1581,7 +1598,8 @@ var script$6 = {
       return this.addedStudents.length > 0 && !this.errorSelectedTime;
     },
     errorSelectedTime: function errorSelectedTime() {
-      return this.end_time_h - this.start_time_h < 0;
+      var endTimeH = this.end_time_h === 0 ? 2400 : this.end_time_h;
+      return endTimeH - this.start_time_h < 0;
     },
     beforeTime: function beforeTime() {
       var rt = getTimeRemaining(this.start_time);
@@ -1603,7 +1621,7 @@ var script$6 = {
     this.start_time = start_time;
     this.start_time_h = this.getNumHour(this.start_time);
     this.end_time = end_time;
-    this.end_time_h = this.getNumHour(this.end_time);
+    this.end_time_h = this.getNumHour(this.end_time, 'end');
     this.addedStudents = data.students;
     this.addedMaterials = data.materials;
     this.day_events = day_events;
@@ -1676,6 +1694,12 @@ var script$6 = {
       this["".concat(timeName, "_time")] = getLocaleTime(newDate.toISOString()); // this.startTime or this.endTime
 
       this["".concat(timeName, "_time_h")] = +dataTime[0] * 100;
+
+      if (timeName === 'end' && this["".concat(timeName, "_time_h")] === 0) {
+        // если конец события в 00:00
+        this["".concat(timeName, "_time_h")] = 2400;
+      }
+
       this.filterTimes();
 
       if (this.start_time_h > this.end_time_h) {
@@ -1759,11 +1783,15 @@ var script$6 = {
           return false;
         }
 
-        if (prop === 'start' && numHour10 === _this3.getNumHour(_this3.end_time)) {
+        if (prop === 'start' && numHour10 === _this3.getNumHour(_this3.end_time, 'end')) {
           return false;
         }
 
-        if (prop === 'end' && numHour10 <= _this3.getNumHour(_this3.start_time)) {
+        if (prop === 'end' && numHour10 < _this3.getNumHour(_this3.start_time)) {
+          return false;
+        }
+
+        if (prop === 'end' && h.indexOf('00:00:00') !== -1) {
           return false;
         }
 
@@ -1783,8 +1811,15 @@ var script$6 = {
         value: time
       };
     },
-    getNumHour: function getNumHour(time) {
-      return +time.slice(11, 16).replace(':', ''); // 2021-10-22T18:00:00+03:00 => 1800
+    getNumHour: function getNumHour(time, prop) {
+      var numHour = +time.slice(11, 16).replace(':', ''); // 2021-10-22T18:00:00+03:00 => 1800
+
+      if (prop === 'end' && numHour === 0) {
+        // если конец события в 00:00
+        numHour = 2400;
+      }
+
+      return numHour;
     }
   }
 };/* script */
@@ -2137,7 +2172,7 @@ var __vue_staticRenderFns__$6 = [];
 
 var __vue_inject_styles__$6 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-20626a42_0", {
+  inject("data-v-f24b6fc2_0", {
     source: ".b-edit-card{display:flex;flex-direction:column;padding:4px 10px 10px 15px;position:relative}.b-edit-card__x{position:relative;right:-10px}.b-edit-card__header{display:flex;justify-content:flex-end;align-items:center;margin:0 0 20px 0}.b-edit-card__header-icon{display:flex;justify-content:center;align-items:center;width:20px;height:20px;margin:0 10px}.b-edit-card__header-icon>span{cursor:pointer}.b-edit-card__header-text{font-size:16px;font-weight:600;color:#0967d1;text-transform:uppercase}.b-added-edit-students{display:flex;flex-wrap:wrap;margin:10px 0 0 0!important}.b-added-edit-students__item{border-right:none!important;margin:0 20px 0 0;display:flex;align-items:center;font-size:16px;color:#0967d1}.b-added-edit-students__item>span{width:20px;height:20px;display:inline-block;margin:0 10px 0 0;background:#0967d1;border-radius:3px}.b-added-students{display:flex;flex-wrap:wrap;margin:10px 0 0 10px!important}.b-added-students__item{border-right:none!important;margin:0 20px 0 0}.b-added-students__item-x{width:8px;height:8px;display:inline-block;margin:0 7px 0 0;cursor:pointer}.b-open-edit-lesson{width:100%;color:#777;display:flex;justify-content:flex-start;align-items:center;margin:0 0 0 25px}.b-open-edit-lesson>button{color:#2089ff;cursor:pointer;border:none;background:0 0}.b-buttons{width:100%;display:flex;justify-content:center;margin:10px 0}.b-date-time{display:flex;align-items:center;flex-wrap:nowrap;padding:10px 0 20px 30px}.b-date-time__date{display:inline-block;margin:0 30px 0 0}.b-date-time__date:first-letter{text-transform:uppercase}.b-delimiter{width:50px;display:flex;justify-content:center;align-items:center}.b-delimiter:before{content:\"\";display:inline-block;border-bottom:1px solid #dadada;width:10px}.b-materials__add-button{color:#2089ff;display:flex;align-items:center;background:0 0;border:none;cursor:pointer}.b-materials__add-button>svg{margin:0 9px 0 0}.b-materials__list{display:flex;flex-direction:column;margin:10px 0 0 30px!important}.b-materials__list-item{border-right:none!important;margin:0 20px 0 0}.b-materials__list-item-x{width:8px;height:8px;display:inline-block;margin:0 7px 0 0;cursor:pointer}.b-before-time{margin:18px 0 10px;display:flex;align-items:center;font-size:14px;color:#333}.b-before-time>svg{margin:0 8px 0 0}",
     map: undefined,
     media: undefined
@@ -2167,9 +2202,6 @@ var __vue_component__$6 = /*#__PURE__*/normalizeComponent({
     },
     KalendarWeekView: function KalendarWeekView() {
       return Promise.resolve().then(function(){return kalendarWeekview});
-    },
-    ScrollContainer: function ScrollContainer() {
-      return Promise.resolve().then(function(){return scrollContainer});
     },
     KalendarCreatedCardSlot: __vue_component__,
     KalendarPopupCardSlot: __vue_component__$5,
@@ -2207,9 +2239,9 @@ var __vue_component__$6 = /*#__PURE__*/normalizeComponent({
     return {
       current_day: getHourlessDate(),
       default_options: {
-        cell_height: 10,
+        cell_height: 30,
         scrollToNow: false,
-        height: 'calc(100vh - 100px)',
+        height: 'calc(100vh - 200px)',
         start_day: getHourlessDate(),
         view_type: 'week',
         style: 'material_design',
@@ -2599,12 +2631,7 @@ var __vue_render__$7 = function __vue_render__() {
     attrs: {
       "current_day": _vm.current_day
     }
-  }) : _c('div', {
-    staticClass: "b-scroll-container",
-    style: {
-      height: _vm.kalendar_options.height
-    }
-  }, [_c('scroll-container', [_c('kalendar-week-view', {
+  }) : _c('kalendar-week-view', {
     attrs: {
       "kalendar_work_hours": _vm.kalendar_work_hours,
       "current_day": _vm.current_day,
@@ -2612,7 +2639,7 @@ var __vue_render__$7 = function __vue_render__() {
       "isEditing": _vm.isEditing,
       "isShowEditPopup": _vm.isShowEditPopup
     }
-  })], 1)], 1), _vm._v(" "), _c('portal', {
+  }), _vm._v(" "), _c('portal', {
     staticClass: "slotable",
     attrs: {
       "to": "event-creation"
@@ -2711,8 +2738,8 @@ var __vue_staticRenderFns__$7 = [];
 
 var __vue_inject_styles__$7 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-e7abf1f8_0", {
-    source: "@import url(https://fonts.googleapis.com/css?family=Rubik:wght@400,600&display=swap);*{box-sizing:border-box;font-family:Rubik,Helvetica,Arial,sans-serif}*{box-sizing:border-box}:after,:before{box-sizing:border-box}html{font-size:10px!important}@media only screen and (max-width:1100px){html{font-size:8px!important}}@media only screen and (max-width:768px){html{font-size:10px!important}}.kalendar-wrapper{font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\";--main-color:#ec4d3d;--weekend-color:#f7f7f7;--current-day-color:#7AFFD7;--table-cell-border-color:#e5e5e5;--odd-cell-border-color:#e5e5e5;--hour-row-color:inherit;--dark:#212121;--lightg:#9e9e9e;--card-bgcolor:#04A675;--card-color:white;--max-hours:10;--previous-events:#c6dafc;--previous-text-color:#727d8f;--green:#0abc83;--red:#ec4d3d}.kalendar-wrapper.gstyle{--hour-row-color:#212121;--main-color:#4285f4;--weekend-color:transparent;--table-cell-border-color:#dadada;--odd-cell-border-color:transparent;font-family:\"Google Sans\",Roboto,-apple-system,BlinkMacSystemFont,\"Segoe UI\",Arial,sans-serif}.kalendar-wrapper.gstyle .week-navigator{display:flex;justify-content:space-between;align-items:center;background:#fff;border-bottom:none;padding:20px;color:rgba(0,0,0,.54)}.kalendar-wrapper.gstyle .week-navigator button{color:rgba(0,0,0,.54)}.kalendar-wrapper.gstyle .created-event,.kalendar-wrapper.gstyle .creating-event{background-color:var(--card-bgcolor);color:var(--card-color);text-shadow:none;border-left:none;border-radius:6px;opacity:1;border-bottom:solid 1px rgba(0,0,0,.03);font-size:14px;padding:3px 10px;display:flex;flex-direction:column;justify-content:center;align-items:center}.kalendar-wrapper.gstyle .created-event>*,.kalendar-wrapper.gstyle .creating-event>*{text-shadow:none}.kalendar-wrapper.gstyle .creating-event{color:var(--main-color);background-color:#7affd7;font-size:12px;padding:3px 10px 2px;border-radius:6px;justify-content:center;align-items:flex-start}.kalendar-wrapper.gstyle .creating-event .time{color:var(--main-color);display:flex;align-items:center}.kalendar-wrapper.gstyle .is-past .created-event,.kalendar-wrapper.gstyle .is-past .creating-event{background-color:var(--previous-events);color:var(--previous-text-color)}.kalendar-wrapper.gstyle .created-event{width:100%}.kalendar-wrapper.gstyle .created-event:hover{cursor:pointer;background-color:var(--main-color)}.kalendar-wrapper.gstyle .created-event:hover *{color:#fff}.kalendar-wrapper.gstyle .sticky-top .days{margin-left:0;padding-left:55px}.kalendar-wrapper.gstyle .all-day{display:none}.kalendar-wrapper.gstyle ul.building-blocks.day-1 li.is-an-hour::before{content:\"\";position:absolute;bottom:-1px;left:-10px;width:10px;height:1px;background-color:var(--table-cell-border-color)}.kalendar-wrapper.gstyle .hours,.kalendar-wrapper.gstyle ul.building-blocks li{border-right:solid 1px var(--table-cell-border-color)}.kalendar-wrapper.gstyle .hour-indicator-line>span.line{height:2px;background-color:#db4437}.kalendar-wrapper.gstyle .hour-indicator-line>span.line:before{content:\"\";width:12px;height:12px;display:block;background-color:#db4437;position:absolute;top:-1px;left:0;border-radius:100%}.kalendar-wrapper.gstyle .days{position:relative}.kalendar-wrapper.gstyle .days:before{content:\"\";position:absolute;height:1px;width:55px;left:0;bottom:0}.kalendar-wrapper.gstyle .day-indicator{display:flex;flex-direction:column;align-items:center;color:var(--dark);font-size:13px;padding-left:0;background:#fff}.kalendar-wrapper.gstyle .day-indicator>div{display:flex;flex-direction:column;align-items:center}.kalendar-wrapper.gstyle .day-indicator.is-before{color:#757575}.kalendar-wrapper.gstyle .day-indicator .number-date{margin-left:0;margin-right:0;order:2;font-size:18px;font-weight:600;width:32px;height:32px;border-radius:100%;align-items:center;justify-content:center;display:flex;margin-top:4px}.kalendar-wrapper.gstyle .day-indicator.today{border-bottom-color:var(--table-cell-border-color)}.kalendar-wrapper.gstyle .day-indicator.today:after{display:none}.kalendar-wrapper.gstyle .day-indicator.today .number-date{background-color:var(--main-color);color:#fff}.kalendar-wrapper.gstyle .day-indicator .letters-date{margin-left:0;margin-right:0;font-weight:500;text-transform:uppercase;font-size:11px}.kalendar-wrapper.gstyle .day-indicator:first-child{position:relative}.kalendar-wrapper.gstyle .day-indicator:first-child::before{content:\"\";position:absolute;left:-1px;top:0;width:1px;height:100%}.kalendar-wrapper.gstyle .creating-event{border-radius:10px;box-shadow:0 2px 2px rgba(0,0,0,.25);transition:opacity .1s linear}.kalendar-wrapper.gstyle .popup-wrapper{width:400px;min-height:116px;box-shadow:0 4px 4px rgba(0,0,0,.25);transition:opacity .1s linear}.kalendar-wrapper.non-desktop .building-blocks{pointer-events:none}.kalendar-wrapper.day-view .day-indicator{align-items:flex-start;text-align:center;padding-left:10px}.created-event,.creating-event{padding:4px 6px;cursor:default;word-break:break-word;height:100%;width:100%;font-size:14px}.created-event h4,.creating-event h4{font-weight:400}.creating-event{background-color:#34aadc;opacity:.9}.creating-event>*{text-shadow:0 0 7px rgba(0,0,0,.25)}.created-event{background-color:#bfecff;opacity:.74;border-left:solid 3px #34aadc;color:#1f6570}.week-navigator{display:flex;align-items:center;background:linear-gradient(#fdfdfd,#f9f9f9);border-bottom:solid 1px #ec4d3d;padding:10px 20px}.week-navigator .nav-wrapper{display:flex;align-items:center;justify-content:space-between;font-size:22px}.week-navigator .nav-wrapper span{white-space:nowrap;line-height:1.6;color:#333}.week-navigator button{background:0 0;border:none;display:inline-flex;margin:0 10px;color:#ec4d3d;align-items:center;font-size:14px;cursor:pointer;padding:0}.kalendar-wrapper{background-color:#fff;min-width:300px}.no-scroll{overflow-y:hidden;max-height:100%}.hour-indicator-line{position:absolute;z-index:11;width:100%;height:10px;display:flex;align-items:center;pointer-events:none;user-select:none;margin:0 0 0 -1px}.hour-indicator-line>span.line{background-color:var(--main-color);height:1px;display:block;flex:1}.hour-indicator-line>span.time-value{font-size:14px;width:48px;color:var(--main-color);font-weight:600;background-color:#fff}.hour-indicator-tooltip{position:absolute;z-index:0;background-color:var(--main-color);width:10px;height:10px;display:block;border-radius:100%;pointer-events:none;user-select:none}ul.kalendar-day li.kalendar-cell:last-child{display:none}.week-navigator-button{outline:0}.week-navigator-button:active svg,.week-navigator-button:hover svg{stroke:var(--main-color)}.gstyle .week-navigator-button{width:32px;height:32px;display:flex;justify-content:center;align-items:center;border:2px solid var(--main-color);border-radius:100%;transition:all .2s}.gstyle .week-navigator-button svg{position:relative;left:1px;stroke:var(--main-color)}.gstyle .week-navigator-button:hover{border:2px solid #fff;background:var(--main-color)}.gstyle .week-navigator-button:hover svg{stroke:#fff}.kalendar-header{display:flex;justify-content:space-between;align-items:center}.kalendar-header>div{display:flex;justify-content:space-between;align-items:center}.main-button{padding:11px 42px;background:#2089ff;box-shadow:5px 5px 15px rgba(0,0,0,.15);border-radius:10px;margin:0 5px;cursor:pointer;border:none;color:#fff}.main-button:active{box-shadow:inset 5px 5px 15px rgba(0,0,0,.15)}.main-button.--gray{background:var(--green)}.main-button.--red{background:var(--red)}.button-today{margin:0 20px 0 0}",
+  inject("data-v-2b8d1bce_0", {
+    source: "@import url(https://fonts.googleapis.com/css?family=Rubik:wght@400,600&display=swap);*{box-sizing:border-box;font-family:Rubik,Helvetica,Arial,sans-serif}*{box-sizing:border-box}:after,:before{box-sizing:border-box}html{font-size:10px!important}@media only screen and (max-width:1100px){html{font-size:8px!important}}@media only screen and (max-width:768px){html{font-size:10px!important}}.kalendar-wrapper{font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\";--main-color:#ec4d3d;--weekend-color:#f7f7f7;--current-day-color:#7AFFD7;--table-cell-border-color:#e5e5e5;--odd-cell-border-color:#e5e5e5;--hour-row-color:inherit;--dark:#212121;--lightg:#9e9e9e;--card-bgcolor:#04A675;--card-color:white;--max-hours:10;--previous-events:#c6dafc;--previous-text-color:#727d8f;--green:#0abc83;--red:#ec4d3d}.kalendar-wrapper.gstyle{--hour-row-color:#212121;--main-color:#4285f4;--weekend-color:transparent;--table-cell-border-color:#dadada;--odd-cell-border-color:transparent;font-family:\"Google Sans\",Roboto,-apple-system,BlinkMacSystemFont,\"Segoe UI\",Arial,sans-serif}.kalendar-wrapper.gstyle .week-navigator{display:flex;justify-content:space-between;align-items:center;background:#fff;border-bottom:none;padding:20px;color:rgba(0,0,0,.54)}.kalendar-wrapper.gstyle .week-navigator button{color:rgba(0,0,0,.54)}.kalendar-wrapper.gstyle .created-event,.kalendar-wrapper.gstyle .creating-event{background-color:var(--card-bgcolor);color:var(--card-color);text-shadow:none;border-left:none;border-radius:6px;opacity:1;border-bottom:solid 1px rgba(0,0,0,.03);font-size:14px;padding:3px 10px;display:flex;flex-direction:column;justify-content:center;align-items:center}.kalendar-wrapper.gstyle .created-event>*,.kalendar-wrapper.gstyle .creating-event>*{text-shadow:none}.kalendar-wrapper.gstyle .creating-event{color:var(--main-color);background-color:#7affd7;font-size:12px;padding:3px 10px 3px;border-radius:6px;justify-content:center;align-items:flex-start}.kalendar-wrapper.gstyle .creating-event .time{color:var(--main-color);display:flex;align-items:center}.kalendar-wrapper.gstyle .is-past .created-event,.kalendar-wrapper.gstyle .is-past .creating-event{background-color:var(--previous-events);color:var(--previous-text-color)}.kalendar-wrapper.gstyle .created-event{width:100%}.kalendar-wrapper.gstyle .created-event:hover{cursor:pointer;background-color:var(--main-color)}.kalendar-wrapper.gstyle .created-event:hover *{color:#fff}.kalendar-wrapper.gstyle .sticky-top .days{margin-left:0;padding-left:55px}.kalendar-wrapper.gstyle .all-day{display:none}.kalendar-wrapper.gstyle ul.building-blocks.day-1 li.is-an-hour::before{content:\"\";position:absolute;bottom:-1px;left:-10px;width:10px;height:1px;background-color:var(--table-cell-border-color)}.kalendar-wrapper.gstyle .hours,.kalendar-wrapper.gstyle ul.building-blocks li{border-right:solid 1px var(--table-cell-border-color)}.kalendar-wrapper.gstyle .hour-indicator-line>span.line{height:2px;background-color:#db4437}.kalendar-wrapper.gstyle .hour-indicator-line>span.line:before{content:\"\";width:12px;height:12px;display:block;background-color:#db4437;position:absolute;top:-1px;left:0;border-radius:100%}.kalendar-wrapper.gstyle .days{position:relative}.kalendar-wrapper.gstyle .days:before{content:\"\";position:absolute;height:1px;width:55px;left:0;bottom:0}.kalendar-wrapper.gstyle .day-indicator{display:flex;flex-direction:column;align-items:center;color:var(--dark);font-size:13px;padding-left:0;background:#fff}.kalendar-wrapper.gstyle .day-indicator>div{display:flex;flex-direction:column;align-items:center}.kalendar-wrapper.gstyle .day-indicator.is-before{color:#757575}.kalendar-wrapper.gstyle .day-indicator .number-date{margin-left:0;margin-right:0;order:2;font-size:18px;font-weight:600;width:32px;height:32px;border-radius:100%;align-items:center;justify-content:center;display:flex;margin-top:4px}.kalendar-wrapper.gstyle .day-indicator.today{border-bottom-color:var(--table-cell-border-color)}.kalendar-wrapper.gstyle .day-indicator.today:after{display:none}.kalendar-wrapper.gstyle .day-indicator.today .number-date{background-color:var(--main-color);color:#fff}.kalendar-wrapper.gstyle .day-indicator .letters-date{margin-left:0;margin-right:0;font-weight:500;text-transform:uppercase;font-size:11px}.kalendar-wrapper.gstyle .day-indicator:first-child{position:relative}.kalendar-wrapper.gstyle .day-indicator:first-child::before{content:\"\";position:absolute;left:-1px;top:0;width:1px;height:100%}.kalendar-wrapper.gstyle .creating-event{border-radius:10px;box-shadow:0 2px 2px rgba(0,0,0,.25);transition:opacity .1s linear}.kalendar-wrapper.gstyle .popup-wrapper{width:400px;min-height:116px;box-shadow:0 4px 4px rgba(0,0,0,.25);transition:opacity .1s linear}.kalendar-wrapper.non-desktop .building-blocks{pointer-events:none}.kalendar-wrapper.day-view .day-indicator{align-items:flex-start;text-align:center;padding-left:10px}.created-event,.creating-event{padding:4px 6px;cursor:default;word-break:break-word;height:100%;width:100%;font-size:14px}.created-event h4,.creating-event h4{font-weight:400}.creating-event{background-color:#34aadc;opacity:.9}.creating-event>*{text-shadow:0 0 7px rgba(0,0,0,.25)}.created-event{background-color:#bfecff;opacity:.74;border-left:solid 3px #34aadc;color:#1f6570}.week-navigator{display:flex;align-items:center;background:linear-gradient(#fdfdfd,#f9f9f9);border-bottom:solid 1px #ec4d3d;padding:10px 20px}.week-navigator .nav-wrapper{display:flex;align-items:center;justify-content:space-between;font-size:22px}.week-navigator .nav-wrapper span{white-space:nowrap;line-height:1.6;color:#333}.week-navigator button{background:0 0;border:none;display:inline-flex;margin:0 10px;color:#ec4d3d;align-items:center;font-size:14px;cursor:pointer;padding:0}.kalendar-wrapper{background-color:#fff;min-width:300px}.no-scroll{overflow-y:hidden;max-height:100%}.hour-indicator-line{position:absolute;z-index:10;width:100%;height:10px;display:flex;align-items:center;pointer-events:none;user-select:none;margin:0 0 0 -1px}.hour-indicator-line>span.line{background-color:var(--main-color);height:1px;display:block;flex:1}.hour-indicator-line>span.time-value{font-size:14px;width:48px;color:var(--main-color);font-weight:600;background-color:#fff}.hour-indicator-tooltip{position:absolute;z-index:0;background-color:var(--main-color);width:10px;height:10px;display:block;border-radius:100%;pointer-events:none;user-select:none}ul.kalendar-day li.kalendar-cell:last-child{display:none}.week-navigator-button{outline:0}.week-navigator-button:active svg,.week-navigator-button:hover svg{stroke:var(--main-color)}.gstyle .week-navigator-button{width:32px;height:32px;display:flex;justify-content:center;align-items:center;border:2px solid var(--main-color);border-radius:100%;transition:all .2s}.gstyle .week-navigator-button svg{position:relative;left:1px;stroke:var(--main-color)}.gstyle .week-navigator-button:hover{border:2px solid #fff;background:var(--main-color)}.gstyle .week-navigator-button:hover svg{stroke:#fff}.kalendar-header{display:flex;justify-content:space-between;align-items:center}.kalendar-header>div{display:flex;justify-content:space-between;align-items:center}.main-button{padding:11px 42px;background:#2089ff;box-shadow:5px 5px 15px rgba(0,0,0,.15);border-radius:10px;margin:0 5px;cursor:pointer;border:none;color:#fff}.main-button:active{box-shadow:inset 5px 5px 15px rgba(0,0,0,.15)}.main-button.--gray{background:var(--green)}.main-button.--red{background:var(--red)}.button-today{margin:0 20px 0 0}",
     map: undefined,
     media: undefined
   });
@@ -3463,9 +3490,6 @@ var __vue_render__$9 = function __vue_render__() {
       'is-weekend': _vm.isWeekend,
       'is-today': _vm.isToday,
       creating: _vm.creator.creating || _vm.creator.status === 'popup-initiated'
-    },
-    staticStyle: {
-      "position": "relative"
     }
   }, [_vm.isToday ? _c('div', {
     ref: "nowIndicator",
@@ -3525,7 +3549,7 @@ var __vue_staticRenderFns__$9 = [];
 
 var __vue_inject_styles__$9 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-0cb4272a_0", {
+  inject("data-v-4a749634_0", {
     source: "ul.kalendar-day{position:relative;background-color:#fff}ul.kalendar-day:hover{background:rgba(32,137,255,.1)}ul.kalendar-day.is-weekend{background-color:var(--weekend-color)}ul.kalendar-day.is-today{border-left:1px solid var(--main-color)}ul.kalendar-day .clear{position:absolute;z-index:1;top:-20px;right:0;font-size:10px}ul.kalendar-day.creating{z-index:11}ul.kalendar-day.creating .created-event{pointer-events:none}",
     map: undefined,
     media: undefined
@@ -3582,7 +3606,8 @@ var script$a = {
     }
   },
   components: {
-    KalendarDay: __vue_component__$9
+    KalendarDay: __vue_component__$9,
+    BaseScrollContainer: __vue_component__$3
   },
   created: function created() {
     var _this = this;
@@ -3801,7 +3826,12 @@ var __vue_render__$a = function __vue_render__() {
       },
       style: "height:" + (_vm.kalendar_options.cell_height + 5) + "px"
     });
-  })], 2)]), _vm._v(" "),  _vm._e(), _vm._v(" "), _vm.hours ? _c('div', {
+  })], 2)]), _vm._v(" "),  _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "b-scroll-container",
+    style: {
+      height: _vm.kalendar_options.height
+    }
+  }, [_c('base-scroll-container', [_vm.hours ? _c('div', {
     staticClass: "blocks"
   }, [_c('div', {
     staticClass: "calendar-blocks"
@@ -3812,7 +3842,7 @@ var __vue_render__$a = function __vue_render__() {
       key: index,
       staticClass: "hour-row-identifier",
       style: "height:" + _vm.hourHeight + "px"
-    }, [_c('span', [_vm._v("\n            " + _vm._s(_vm.kalendar_options.formatLeftHours(hour.value)) + "\n          ")])]);
+    }, [_c('span', [_vm._v("\n                " + _vm._s(_vm.kalendar_options.formatLeftHours(hour.value)) + "\n              ")])]);
   }), 0), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
@@ -3842,7 +3872,7 @@ var __vue_render__$a = function __vue_render__() {
         "isShowEditPopup": _vm.isShowEditPopup
       }
     });
-  })], 2)]) : _vm._e()]);
+  })], 2)]) : _vm._e()])], 1)]);
 };
 
 var __vue_staticRenderFns__$a = [];
@@ -3850,8 +3880,8 @@ var __vue_staticRenderFns__$a = [];
 
 var __vue_inject_styles__$a = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-08160daa_0", {
-    source: ".calendar-wrap{display:flex;flex-direction:column}.calendar-wrap ul{list-style:none;padding:0}.calendar-wrap ul>li{display:flex}.sticky-top{position:sticky;top:0;z-index:20;background:#fff}.sticky-top .days{margin:0;display:flex;margin-left:55px}.sticky-top .days li{display:inline-flex;align-items:flex-end;padding-top:10px;flex:1;font-size:1.1rem;color:#666;font-weight:300;margin-right:var(--space-between-cols);border-bottom:solid 1px #e5e5e5;padding-bottom:5px;position:relative;font-size:18px}.sticky-top .days li span{margin-right:3px}.sticky-top .days li span:first-child{font-size:20px;font-weight:500}.sticky-top .days .today{border-bottom-color:var(--main-color);color:var(--main-color)!important}.sticky-top .days .today::after{content:\"\";position:absolute;height:2px;bottom:0;left:0;width:100%;background-color:var(--main-color)}.sticky-top .all-day{display:flex;margin-bottom:0;margin-top:0;border-bottom:solid 2px #e5e5e5}.sticky-top .all-day span{display:flex;align-items:center;padding:0 5px;width:55px;font-weight:500;font-size:.8rem;color:#b8bbca;text-transform:lowercase}.sticky-top .all-day li{flex:1;margin-right:var(--space-between-cols)}.sticky-top .all-day li.all-today{background-color:#fef4f4}.dummy-row{display:flex;padding-left:55px}.dummy-row ul{display:flex;flex:1;margin:0}.dummy-row li{flex:1;height:15px;margin-right:var(--space-between-cols);border-bottom:solid 1px #e5e5e5}.blocks{display:flex;position:relative;height:100%}.blocks ul{margin-top:0}.blocks .building-blocks{flex:1;margin-right:var(--space-between-cols);margin-bottom:0;display:flex;flex-direction:column}.blocks .calendar-blocks{width:100%;display:flex;position:relative;padding:0 50px 0 0}.hours{display:flex;flex-direction:column;color:#b8bbca;font-weight:500;font-size:.85rem;width:55px;height:100%;margin-bottom:0}.hours li{color:var(--hour-row-color);border-bottom:solid 1px transparent;padding-left:8px}.hours li span{margin-top:-8px}.hours li:first-child span{padding-top:5px}",
+  inject("data-v-10d198c5_0", {
+    source: ".calendar-wrap ul{list-style:none;padding:0}.calendar-wrap ul>li{display:flex}.sticky-top{position:sticky;top:0;z-index:20;background:#fff}.sticky-top .days{margin:0;display:flex;margin-left:55px}.sticky-top .days li{display:inline-flex;align-items:flex-end;padding-top:10px;flex:1;font-size:1.1rem;color:#666;font-weight:300;margin-right:var(--space-between-cols);border-bottom:solid 1px #e5e5e5;padding-bottom:5px;position:relative;font-size:18px}.sticky-top .days li span{margin-right:3px}.sticky-top .days li span:first-child{font-size:20px;font-weight:500}.sticky-top .days .today{border-bottom-color:var(--main-color);color:var(--main-color)!important}.sticky-top .days .today::after{content:\"\";position:absolute;height:2px;bottom:0;left:0;width:100%;background-color:var(--main-color)}.sticky-top .all-day{display:flex;margin-bottom:0;margin-top:0;border-bottom:solid 2px #e5e5e5}.sticky-top .all-day span{display:flex;align-items:center;padding:0 5px;width:55px;font-weight:500;font-size:.8rem;color:#b8bbca;text-transform:lowercase}.sticky-top .all-day li{flex:1;margin-right:var(--space-between-cols)}.sticky-top .all-day li.all-today{background-color:#fef4f4}.dummy-row{display:flex;padding-left:55px}.dummy-row ul{display:flex;flex:1;margin:0}.dummy-row li{flex:1;height:15px;margin-right:var(--space-between-cols);border-bottom:solid 1px #e5e5e5}.blocks{display:flex;position:relative}.blocks ul{margin-top:0}.blocks .building-blocks{flex:1;margin-right:var(--space-between-cols);margin-bottom:0;display:flex;flex-direction:column}.blocks .calendar-blocks{width:100%;display:flex;position:relative;padding:0 50px 0 0}.hours{display:flex;flex-direction:column;color:#b8bbca;font-weight:500;font-size:.85rem;width:55px;height:100%;margin-bottom:0}.hours li{color:var(--hour-row-color);border-bottom:solid 1px transparent;padding-left:8px}.hours li span{margin-top:-8px}.hours li:first-child span{padding-top:5px}",
     map: undefined,
     media: undefined
   });
@@ -3873,94 +3903,8 @@ var __vue_is_functional_template__$a = false;
 var __vue_component__$a = /*#__PURE__*/normalizeComponent({
   render: __vue_render__$a,
   staticRenderFns: __vue_staticRenderFns__$a
-}, __vue_inject_styles__$a, __vue_script__$a, __vue_scope_id__$a, __vue_is_functional_template__$a, __vue_module_identifier__$a, false, createInjector, undefined, undefined);var kalendarWeekview=/*#__PURE__*/Object.freeze({__proto__:null,'default': __vue_component__$a});var script$b = {
-  props: {
-    styling: {
-      type: Object
-    },
-    backgroundBar: {
-      type: String,
-      default: '#C4C4C4'
-    }
-  },
-  computed: {
-    cssProps: function cssProps() {
-      return {
-        '--bg-color': this.backgroundBar
-      };
-    }
-  },
-  mounted: function mounted() {
-    var vb = this.$refs.vueBar;
-    var el = vb.querySelector('.vb-content');
-    var sel = el.querySelector('.selected');
-    var top = null;
-    var h = null;
-
-    if (sel) {
-      top = sel.offsetTop;
-      h = el.offsetHeight / 2; // half height .vb-content
-    }
-
-    if (top !== null && top > h) el.scrollTop = top - h;
-  }
-};/* script */
-var __vue_script__$b = script$b;
-/* template */
-
-var __vue_render__$b = function __vue_render__() {
-  var _vm = this;
-
-  var _h = _vm.$createElement;
-
-  var _c = _vm._self._c || _h;
-
-  return _c('div', {
-    directives: [{
-      name: "bar",
-      rawName: "v-bar",
-      value: {
-        preventParentScroll: true,
-        scrollThrottle: 30
-      },
-      expression: "{ \n    preventParentScroll: \n    true, scrollThrottle: 30 \n  }"
-    }],
-    ref: "vueBar",
-    staticClass: "vuebar-element",
-    style: [_vm.styling, _vm.cssProps]
-  }, [_c('div', [_vm._t("default")], 2)]);
-};
-
-var __vue_staticRenderFns__$b = [];
-/* style */
-
-var __vue_inject_styles__$b = function __vue_inject_styles__(inject) {
-  if (!inject) return;
-  inject("data-v-061df6bf_0", {
-    source: ".vue-scrollbar__wrapper{background:0 0}.vue-scrollbar__scrollbar-vertical{width:.2rem;height:92%;top:.4rem;bottom:.4rem;right:.4rem}.vue-scrollbar__scrollbar-vertical .scrollbar{width:.2rem;border-radius:.2rem}.b-scroll-bar{background-color:var(--bg-color)}.b-scroll-bar .scrollbar{background-color:var(--bg-color)}.vuebar-element{height:100%;width:100%}.vb>.vb-dragger{z-index:5;width:10px;right:0}.vb>.vb-dragger>.vb-dragger-styler{-webkit-backface-visibility:hidden;backface-visibility:hidden;-webkit-transform:rotate3d(0,0,0,0);transform:rotate3d(0,0,0,0);-webkit-transition:background-color .1s ease-out,margin .1s ease-out,height .1s ease-out;transition:background-color .1s ease-out,margin .1s ease-out,height .1s ease-out;background-color:var(--bg-color);opacity:.5;margin:5px 5px 5px 0;border-radius:20px;height:calc(100% - 10px);min-height:2px;display:block}.vb-invisible>.vb-dragger>.vb-dragger-styler{display:none}.vb.vb-scrolling-phantom>.vb-dragger>.vb-dragger-styler{background-color:var(--bg-color);opacity:.3}.vb>.vb-dragger:hover>.vb-dragger-styler{background-color:var(--bg-color);margin:0;height:100%;opacity:.5}.vb.vb-dragging>.vb-dragger>.vb-dragger-styler{background-color:var(--bg-color);margin:0;height:100%;opacity:.5}.vb.vb-dragging-phantom>.vb-dragger>.vb-dragger-styler{background-color:var(--bg-color);opacity:.5}.vb-content::-webkit-scrollbar{display:none;scrollbar-width:none}",
-    map: undefined,
-    media: undefined
-  });
-};
-/* scoped */
-
-
-var __vue_scope_id__$b = undefined;
-/* module identifier */
-
-var __vue_module_identifier__$b = undefined;
-/* functional template */
-
-var __vue_is_functional_template__$b = false;
-/* style inject SSR */
-
-/* style inject shadow dom */
-
-var __vue_component__$b = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$b,
-  staticRenderFns: __vue_staticRenderFns__$b
-}, __vue_inject_styles__$b, __vue_script__$b, __vue_scope_id__$b, __vue_is_functional_template__$b, __vue_module_identifier__$b, false, createInjector, undefined, undefined);var scrollContainer=/*#__PURE__*/Object.freeze({__proto__:null,'default': __vue_component__$b});//
-var script$c = {
+}, __vue_inject_styles__$a, __vue_script__$a, __vue_scope_id__$a, __vue_is_functional_template__$a, __vue_module_identifier__$a, false, createInjector, undefined, undefined);var kalendarWeekview=/*#__PURE__*/Object.freeze({__proto__:null,'default': __vue_component__$a});//
+var script$b = {
   name: "kalendar-daymonth",
   components: {
     KalendarEvent: function KalendarEvent() {
@@ -4016,10 +3960,10 @@ var script$c = {
     }
   }
 };/* script */
-var __vue_script__$c = script$c;
+var __vue_script__$b = script$b;
 /* template */
 
-var __vue_render__$c = function __vue_render__() {
+var __vue_render__$b = function __vue_render__() {
   var _vm = this;
 
   var _h = _vm.$createElement;
@@ -4048,10 +3992,10 @@ var __vue_render__$c = function __vue_render__() {
   }), 0);
 };
 
-var __vue_staticRenderFns__$c = [];
+var __vue_staticRenderFns__$b = [];
 /* style */
 
-var __vue_inject_styles__$c = function __vue_inject_styles__(inject) {
+var __vue_inject_styles__$b = function __vue_inject_styles__(inject) {
   if (!inject) return;
   inject("data-v-3674cae9_0", {
     source: ".calendar-day[data-v-3674cae9]{border-bottom:solid 1px var(--table-cell-border-color);border-left:solid 1px var(--table-cell-border-color);margin:0;padding:.3rem;height:120px}.calendar-day>li[data-v-3674cae9]{list-style:none;border:none!important;display:block;position:relative}.calendar-day.is-weekend[data-v-3674cae9]{background-color:#f7f7f7}",
@@ -4062,21 +4006,21 @@ var __vue_inject_styles__$c = function __vue_inject_styles__(inject) {
 /* scoped */
 
 
-var __vue_scope_id__$c = "data-v-3674cae9";
+var __vue_scope_id__$b = "data-v-3674cae9";
 /* module identifier */
 
-var __vue_module_identifier__$c = undefined;
+var __vue_module_identifier__$b = undefined;
 /* functional template */
 
-var __vue_is_functional_template__$c = false;
+var __vue_is_functional_template__$b = false;
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-var __vue_component__$c = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$c,
-  staticRenderFns: __vue_staticRenderFns__$c
-}, __vue_inject_styles__$c, __vue_script__$c, __vue_scope_id__$c, __vue_is_functional_template__$c, __vue_module_identifier__$c, false, createInjector, undefined, undefined);var kalendarDaymonth=/*#__PURE__*/Object.freeze({__proto__:null,'default': __vue_component__$c});var script$d = {
+var __vue_component__$b = /*#__PURE__*/normalizeComponent({
+  render: __vue_render__$b,
+  staticRenderFns: __vue_staticRenderFns__$b
+}, __vue_inject_styles__$b, __vue_script__$b, __vue_scope_id__$b, __vue_is_functional_template__$b, __vue_module_identifier__$b, false, createInjector, undefined, undefined);var kalendarDaymonth=/*#__PURE__*/Object.freeze({__proto__:null,'default': __vue_component__$b});var script$c = {
   props: ['creator', 'index', 'cellData', 'constructedEvents', 'constructedWorkHours', 'temporaryEvent', 'kalendar_events', 'isEditing', 'isShowEditPopup'],
   inject: ['kalendar_options'],
   components: {
@@ -4212,10 +4156,10 @@ var __vue_component__$c = /*#__PURE__*/normalizeComponent({
     }
   }
 };/* script */
-var __vue_script__$d = script$d;
+var __vue_script__$c = script$c;
 /* template */
 
-var __vue_render__$d = function __vue_render__() {
+var __vue_render__$c = function __vue_render__() {
   var _vm = this;
 
   var _h = _vm.$createElement;
@@ -4268,10 +4212,10 @@ var __vue_render__$d = function __vue_render__() {
   }), 1) : _vm._e();
 };
 
-var __vue_staticRenderFns__$d = [];
+var __vue_staticRenderFns__$c = [];
 /* style */
 
-var __vue_inject_styles__$d = function __vue_inject_styles__(inject) {
+var __vue_inject_styles__$c = function __vue_inject_styles__(inject) {
   if (!inject) return;
   inject("data-v-d02ce4b6_0", {
     source: "li{font-size:13px;position:relative}.created-events{height:100%}ul.building-blocks li{z-index:0;border-bottom:dotted 1px var(--odd-cell-border-color)}ul.building-blocks li.first_of_appointment{z-index:1;opacity:1}ul.building-blocks li.is-an-hour{border-bottom:solid 1px var(--table-cell-border-color)}ul.building-blocks li.has-events{z-index:unset}ul.building-blocks li.being-created{z-index:11}ul.building-blocks li.work-time{background-color:#7afFD766}",
@@ -4282,22 +4226,22 @@ var __vue_inject_styles__$d = function __vue_inject_styles__(inject) {
 /* scoped */
 
 
-var __vue_scope_id__$d = undefined;
+var __vue_scope_id__$c = undefined;
 /* module identifier */
 
-var __vue_module_identifier__$d = undefined;
+var __vue_module_identifier__$c = undefined;
 /* functional template */
 
-var __vue_is_functional_template__$d = false;
+var __vue_is_functional_template__$c = false;
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-var __vue_component__$d = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$d,
-  staticRenderFns: __vue_staticRenderFns__$d
-}, __vue_inject_styles__$d, __vue_script__$d, __vue_scope_id__$d, __vue_is_functional_template__$d, __vue_module_identifier__$d, false, createInjector, undefined, undefined);var kalendarCell=/*#__PURE__*/Object.freeze({__proto__:null,'default': __vue_component__$d});//
-var script$e = {
+var __vue_component__$c = /*#__PURE__*/normalizeComponent({
+  render: __vue_render__$c,
+  staticRenderFns: __vue_staticRenderFns__$c
+}, __vue_inject_styles__$c, __vue_script__$c, __vue_scope_id__$c, __vue_is_functional_template__$c, __vue_module_identifier__$c, false, createInjector, undefined, undefined);var kalendarCell=/*#__PURE__*/Object.freeze({__proto__:null,'default': __vue_component__$c});//
+var script$d = {
   props: ['creatingWorkTime', 'index', 'cellData', 'constructedWorkHours', 'temporaryWorkHours'],
   inject: ['kalendar_options'],
   computed: {
@@ -4336,10 +4280,10 @@ var script$e = {
     }
   }
 };/* script */
-var __vue_script__$e = script$e;
+var __vue_script__$d = script$d;
 /* template */
 
-var __vue_render__$e = function __vue_render__() {
+var __vue_render__$d = function __vue_render__() {
   var _vm = this;
 
   var _h = _vm.$createElement;
@@ -4384,13 +4328,13 @@ var __vue_render__$e = function __vue_render__() {
   }, [_c('span', [_vm._v(_vm._s(_vm.getTime(_vm.cellData.value)))])]);
 };
 
-var __vue_staticRenderFns__$e = [];
+var __vue_staticRenderFns__$d = [];
 /* style */
 
-var __vue_inject_styles__$e = function __vue_inject_styles__(inject) {
+var __vue_inject_styles__$d = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-f9139950_0", {
-    source: "li[data-v-f9139950]{font-size:13px;position:relative}.created-events[data-v-f9139950]{height:100%}ul.building-blocks li[data-v-f9139950]{z-index:0}ul.building-blocks li.--work-time[data-v-f9139950]{justify-content:flex-end;font-size:9px;color:var(--main-color);user-select:none;font-weight:700}ul.building-blocks li.first_of_appointment[data-v-f9139950]{z-index:1;opacity:1}ul.building-blocks li.is-an-hour[data-v-f9139950]{border-bottom:solid 1px var(--table-cell-border-color)}ul.building-blocks li.has-events[data-v-f9139950]{z-index:unset}ul.building-blocks li.being-created[data-v-f9139950]{z-index:11}ul.building-blocks li.selected-work-time[data-v-f9139950]{background:#7afFD766}ul.building-blocks li>span[data-v-f9139950]{display:none}ul.building-blocks li[data-v-f9139950]:hover{border-bottom:1px solid var(--main-color)}ul.building-blocks li:hover span[data-v-f9139950]{text-align:right;display:block;padding-bottom:5px}",
+  inject("data-v-5c1f48be_0", {
+    source: "li[data-v-5c1f48be]{font-size:13px;position:relative}.created-events[data-v-5c1f48be]{height:100%}ul.building-blocks li[data-v-5c1f48be]{z-index:0}ul.building-blocks li.--work-time[data-v-5c1f48be]{justify-content:flex-end;font-size:9px;color:var(--main-color);user-select:none;font-weight:700;background:#ffffe4}ul.building-blocks li.first_of_appointment[data-v-5c1f48be]{z-index:1;opacity:1}ul.building-blocks li.is-an-hour[data-v-5c1f48be]{border-bottom:solid 1px var(--table-cell-border-color)}ul.building-blocks li.has-events[data-v-5c1f48be]{z-index:unset}ul.building-blocks li.being-created[data-v-5c1f48be]{z-index:11}ul.building-blocks li.selected-work-time[data-v-5c1f48be]{background:#7afFD766}ul.building-blocks li>span[data-v-5c1f48be]{display:none}ul.building-blocks li[data-v-5c1f48be]:hover{border-bottom:1px solid var(--main-color)}ul.building-blocks li:hover span[data-v-5c1f48be]{text-align:right;display:block;padding-bottom:5px}",
     map: undefined,
     media: undefined
   });
@@ -4398,22 +4342,22 @@ var __vue_inject_styles__$e = function __vue_inject_styles__(inject) {
 /* scoped */
 
 
-var __vue_scope_id__$e = "data-v-f9139950";
+var __vue_scope_id__$d = "data-v-5c1f48be";
 /* module identifier */
 
-var __vue_module_identifier__$e = undefined;
+var __vue_module_identifier__$d = undefined;
 /* functional template */
 
-var __vue_is_functional_template__$e = false;
+var __vue_is_functional_template__$d = false;
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-var __vue_component__$e = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$e,
-  staticRenderFns: __vue_staticRenderFns__$e
-}, __vue_inject_styles__$e, __vue_script__$e, __vue_scope_id__$e, __vue_is_functional_template__$e, __vue_module_identifier__$e, false, createInjector, undefined, undefined);var kalendarWorkingTimeCell=/*#__PURE__*/Object.freeze({__proto__:null,'default': __vue_component__$e});Vue.use(vClickOutside);
-var script$f = {
+var __vue_component__$d = /*#__PURE__*/normalizeComponent({
+  render: __vue_render__$d,
+  staticRenderFns: __vue_staticRenderFns__$d
+}, __vue_inject_styles__$d, __vue_script__$d, __vue_scope_id__$d, __vue_is_functional_template__$d, __vue_module_identifier__$d, false, createInjector, undefined, undefined);var kalendarWorkingTimeCell=/*#__PURE__*/Object.freeze({__proto__:null,'default': __vue_component__$d});Vue.use(vClickOutside);
+var script$e = {
   props: ['event', 'total', 'index', 'overlaps', 'kalendar_events', 'isShowEditPopup', 'day_events', 'flat' // for month view
   ],
   created: function created() {},
@@ -4506,21 +4450,21 @@ var script$f = {
       var popcorn = this.$refs['target'];
       var tooltip = this.$refs['popup'];
       this.popper = core.createPopper(popcorn, tooltip, {
-        placement: 'right',
+        placement: 'right-start',
         modifiers: [{
           name: 'flip',
           options: {
-            fallbackPlacements: ['top', 'right', 'bottom', 'left']
+            fallbackPlacements: ['top-start', 'right-start', 'bottom-start', 'left-start']
           }
         }]
       });
     }
   }
 };/* script */
-var __vue_script__$f = script$f;
+var __vue_script__$e = script$e;
 /* template */
 
-var __vue_render__$f = function __vue_render__() {
+var __vue_render__$e = function __vue_render__() {
   var _vm = this;
 
   var _h = _vm.$createElement;
@@ -4592,12 +4536,12 @@ var __vue_render__$f = function __vue_render__() {
   })], 1) : _vm._e()]);
 };
 
-var __vue_staticRenderFns__$f = [];
+var __vue_staticRenderFns__$e = [];
 /* style */
 
-var __vue_inject_styles__$f = function __vue_inject_styles__(inject) {
+var __vue_inject_styles__$e = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-1a617b86_0", {
+  inject("data-v-3dc00cc7_0", {
     source: ".event-card{display:flex;flex-direction:column;height:100%;width:100%;z-index:5;color:#fff;user-select:none;will-change:height}.event-card h4,.event-card p{margin:0}.event-card>*{flex:1;position:relative}.event-card.editing{z-index:10}.event-card.creating{z-index:-1}.event-card.overlaps>*{border:solid 1px #fff!important}.event-card__mini .created-event>div>.details-card small{display:none}.event-card__mini .appointment-title,.event-card__mini .time{font-size:9px;height:100%}.event-card__small .appointment-title{font-size:80%}.event-card__small .time{font-size:70%}.event-card.two-in-one .details-card>*{font-size:60%}.event-card.is-flat{margin-bottom:3px}.event-card.is-flat .details-card>small{display:none}.event-card.is-flat .remove{top:1px}.event-card:not(.is-flat){position:absolute;pointer-events:none;top:0;left:0;right:0;bottom:0}.event-card h1,.event-card h2,.event-card h3,.event-card h4,.event-card h5,.event-card h6,.event-card p{margin:0}.time{font-size:11px}.popup-wrapper{text-shadow:none;color:#000;z-index:10;position:absolute;top:0;left:calc(100% + 5px);display:flex;flex-direction:column;pointer-events:all;user-select:none;background-color:#fff;border:solid 1px rgba(0,0,0,.08);border-radius:4px;box-shadow:0 2px 12px -3px rgba(0,0,0,.3);padding:10px}.popup-wrapper h4{color:#000;font-weight:400}.popup-wrapper input,.popup-wrapper textarea{border:none;background-color:#ebebeb;color:#030303;border-radius:4px;padding:5px 8px;margin-bottom:5px}.created-event{pointer-events:all;position:relative}.created-event>.details-card{max-width:100%;width:100%}.created-event>.details-card h2,.created-event>.details-card h3,.created-event>.details-card h4,.created-event>.details-card p,.created-event>.details-card small,.created-event>.details-card span,.created-event>.details-card strong,.created-event>.details-card>h1{text-overflow:ellipsis;overflow:hidden;display:block}ul:nth-last-child(-n+3) .popup-wrapper{left:auto;right:100%;margin-right:10px}.day-view ul .popup-wrapper{left:auto;right:auto;width:calc(100% - 10px);top:10px}",
     map: undefined,
     media: undefined
@@ -4606,18 +4550,18 @@ var __vue_inject_styles__$f = function __vue_inject_styles__(inject) {
 /* scoped */
 
 
-var __vue_scope_id__$f = undefined;
+var __vue_scope_id__$e = undefined;
 /* module identifier */
 
-var __vue_module_identifier__$f = undefined;
+var __vue_module_identifier__$e = undefined;
 /* functional template */
 
-var __vue_is_functional_template__$f = false;
+var __vue_is_functional_template__$e = false;
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-var __vue_component__$f = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$f,
-  staticRenderFns: __vue_staticRenderFns__$f
-}, __vue_inject_styles__$f, __vue_script__$f, __vue_scope_id__$f, __vue_is_functional_template__$f, __vue_module_identifier__$f, false, createInjector, undefined, undefined);var kalendarEvent=/*#__PURE__*/Object.freeze({__proto__:null,'default': __vue_component__$f});exports.Kalendar=__vue_component__$7;exports.default=plugin;
+var __vue_component__$e = /*#__PURE__*/normalizeComponent({
+  render: __vue_render__$e,
+  staticRenderFns: __vue_staticRenderFns__$e
+}, __vue_inject_styles__$e, __vue_script__$e, __vue_scope_id__$e, __vue_is_functional_template__$e, __vue_module_identifier__$e, false, createInjector, undefined, undefined);var kalendarEvent=/*#__PURE__*/Object.freeze({__proto__:null,'default': __vue_component__$e});exports.Kalendar=__vue_component__$7;exports.default=plugin;

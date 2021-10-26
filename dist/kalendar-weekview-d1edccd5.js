@@ -1,4 +1,4 @@
-import { k as isWeekend, l as isToday, g as getLocaleTime, m as _objectSpread2, n as cloneObject, h as __vue_normalize__, j as __vue_create_injector__, o as isBefore, q as getHourlessDate, r as addTimezoneInfo } from './index-6f238ba0.js';
+import { k as isWeekend, l as isToday, g as getLocaleTime, m as _objectSpread2, n as cloneObject, h as __vue_normalize__, j as __vue_create_injector__, B as BaseScrollContainer, o as isBefore, q as getHourlessDate, r as addTimezoneInfo } from './index-dbaaad42.js';
 import 'vue';
 import { m as myWorker } from './index-d71cc8ae.js';
 
@@ -37,10 +37,10 @@ var script = {
   },
   components: {
     kalendarCell: function kalendarCell() {
-      return import('./kalendar-cell-1d856a8c.js');
+      return import('./kalendar-cell-dc20eb31.js');
     },
     kalendarWorkingTimeCell: function kalendarWorkingTimeCell() {
-      return import('./kalendar-working-time-cell-6e0aae7e.js');
+      return import('./kalendar-working-time-cell-1935d147.js');
     }
   },
   provide: function provide() {
@@ -449,9 +449,6 @@ var __vue_render__ = function __vue_render__() {
       'is-weekend': _vm.isWeekend,
       'is-today': _vm.isToday,
       creating: _vm.creator.creating || _vm.creator.status === 'popup-initiated'
-    },
-    staticStyle: {
-      "position": "relative"
     }
   }, [_vm.isToday ? _c('div', {
     ref: "nowIndicator",
@@ -511,7 +508,7 @@ var __vue_staticRenderFns__ = [];
 
 var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-0cb4272a_0", {
+  inject("data-v-4a749634_0", {
     source: "ul.kalendar-day{position:relative;background-color:#fff}ul.kalendar-day:hover{background:rgba(32,137,255,.1)}ul.kalendar-day.is-weekend{background-color:var(--weekend-color)}ul.kalendar-day.is-today{border-left:1px solid var(--main-color)}ul.kalendar-day .clear{position:absolute;z-index:1;top:-20px;right:0;font-size:10px}ul.kalendar-day.creating{z-index:11}ul.kalendar-day.creating .created-event{pointer-events:none}",
     map: undefined,
     media: undefined
@@ -570,7 +567,8 @@ var script$1 = {
     }
   },
   components: {
-    KalendarDay: __vue_component__
+    KalendarDay: __vue_component__,
+    BaseScrollContainer: BaseScrollContainer
   },
   created: function created() {
     var _this = this;
@@ -791,7 +789,12 @@ var __vue_render__$1 = function __vue_render__() {
       },
       style: "height:" + (_vm.kalendar_options.cell_height + 5) + "px"
     });
-  })], 2)]), _vm._v(" "),  _vm._e(), _vm._v(" "), _vm.hours ? _c('div', {
+  })], 2)]), _vm._v(" "),  _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "b-scroll-container",
+    style: {
+      height: _vm.kalendar_options.height
+    }
+  }, [_c('base-scroll-container', [_vm.hours ? _c('div', {
     staticClass: "blocks"
   }, [_c('div', {
     staticClass: "calendar-blocks"
@@ -802,7 +805,7 @@ var __vue_render__$1 = function __vue_render__() {
       key: index,
       staticClass: "hour-row-identifier",
       style: "height:" + _vm.hourHeight + "px"
-    }, [_c('span', [_vm._v("\n            " + _vm._s(_vm.kalendar_options.formatLeftHours(hour.value)) + "\n          ")])]);
+    }, [_c('span', [_vm._v("\n                " + _vm._s(_vm.kalendar_options.formatLeftHours(hour.value)) + "\n              ")])]);
   }), 0), _vm._v(" "), _c('div', {
     directives: [{
       name: "show",
@@ -832,7 +835,7 @@ var __vue_render__$1 = function __vue_render__() {
         "isShowEditPopup": _vm.isShowEditPopup
       }
     });
-  })], 2)]) : _vm._e()]);
+  })], 2)]) : _vm._e()])], 1)]);
 };
 
 var __vue_staticRenderFns__$1 = [];
@@ -840,8 +843,8 @@ var __vue_staticRenderFns__$1 = [];
 
 var __vue_inject_styles__$1 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-08160daa_0", {
-    source: ".calendar-wrap{display:flex;flex-direction:column}.calendar-wrap ul{list-style:none;padding:0}.calendar-wrap ul>li{display:flex}.sticky-top{position:sticky;top:0;z-index:20;background:#fff}.sticky-top .days{margin:0;display:flex;margin-left:55px}.sticky-top .days li{display:inline-flex;align-items:flex-end;padding-top:10px;flex:1;font-size:1.1rem;color:#666;font-weight:300;margin-right:var(--space-between-cols);border-bottom:solid 1px #e5e5e5;padding-bottom:5px;position:relative;font-size:18px}.sticky-top .days li span{margin-right:3px}.sticky-top .days li span:first-child{font-size:20px;font-weight:500}.sticky-top .days .today{border-bottom-color:var(--main-color);color:var(--main-color)!important}.sticky-top .days .today::after{content:\"\";position:absolute;height:2px;bottom:0;left:0;width:100%;background-color:var(--main-color)}.sticky-top .all-day{display:flex;margin-bottom:0;margin-top:0;border-bottom:solid 2px #e5e5e5}.sticky-top .all-day span{display:flex;align-items:center;padding:0 5px;width:55px;font-weight:500;font-size:.8rem;color:#b8bbca;text-transform:lowercase}.sticky-top .all-day li{flex:1;margin-right:var(--space-between-cols)}.sticky-top .all-day li.all-today{background-color:#fef4f4}.dummy-row{display:flex;padding-left:55px}.dummy-row ul{display:flex;flex:1;margin:0}.dummy-row li{flex:1;height:15px;margin-right:var(--space-between-cols);border-bottom:solid 1px #e5e5e5}.blocks{display:flex;position:relative;height:100%}.blocks ul{margin-top:0}.blocks .building-blocks{flex:1;margin-right:var(--space-between-cols);margin-bottom:0;display:flex;flex-direction:column}.blocks .calendar-blocks{width:100%;display:flex;position:relative;padding:0 50px 0 0}.hours{display:flex;flex-direction:column;color:#b8bbca;font-weight:500;font-size:.85rem;width:55px;height:100%;margin-bottom:0}.hours li{color:var(--hour-row-color);border-bottom:solid 1px transparent;padding-left:8px}.hours li span{margin-top:-8px}.hours li:first-child span{padding-top:5px}",
+  inject("data-v-10d198c5_0", {
+    source: ".calendar-wrap ul{list-style:none;padding:0}.calendar-wrap ul>li{display:flex}.sticky-top{position:sticky;top:0;z-index:20;background:#fff}.sticky-top .days{margin:0;display:flex;margin-left:55px}.sticky-top .days li{display:inline-flex;align-items:flex-end;padding-top:10px;flex:1;font-size:1.1rem;color:#666;font-weight:300;margin-right:var(--space-between-cols);border-bottom:solid 1px #e5e5e5;padding-bottom:5px;position:relative;font-size:18px}.sticky-top .days li span{margin-right:3px}.sticky-top .days li span:first-child{font-size:20px;font-weight:500}.sticky-top .days .today{border-bottom-color:var(--main-color);color:var(--main-color)!important}.sticky-top .days .today::after{content:\"\";position:absolute;height:2px;bottom:0;left:0;width:100%;background-color:var(--main-color)}.sticky-top .all-day{display:flex;margin-bottom:0;margin-top:0;border-bottom:solid 2px #e5e5e5}.sticky-top .all-day span{display:flex;align-items:center;padding:0 5px;width:55px;font-weight:500;font-size:.8rem;color:#b8bbca;text-transform:lowercase}.sticky-top .all-day li{flex:1;margin-right:var(--space-between-cols)}.sticky-top .all-day li.all-today{background-color:#fef4f4}.dummy-row{display:flex;padding-left:55px}.dummy-row ul{display:flex;flex:1;margin:0}.dummy-row li{flex:1;height:15px;margin-right:var(--space-between-cols);border-bottom:solid 1px #e5e5e5}.blocks{display:flex;position:relative}.blocks ul{margin-top:0}.blocks .building-blocks{flex:1;margin-right:var(--space-between-cols);margin-bottom:0;display:flex;flex-direction:column}.blocks .calendar-blocks{width:100%;display:flex;position:relative;padding:0 50px 0 0}.hours{display:flex;flex-direction:column;color:#b8bbca;font-weight:500;font-size:.85rem;width:55px;height:100%;margin-bottom:0}.hours li{color:var(--hour-row-color);border-bottom:solid 1px transparent;padding-left:8px}.hours li span{margin-top:-8px}.hours li:first-child span{padding-top:5px}",
     map: undefined,
     media: undefined
   });

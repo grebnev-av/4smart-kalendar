@@ -1,4 +1,4 @@
-import { g as getLocaleTime, o as isBefore, m as _objectSpread2, r as addTimezoneInfo, h as __vue_normalize__, j as __vue_create_injector__ } from './index-6f238ba0.js';
+import { g as getLocaleTime, o as isBefore, m as _objectSpread2, r as addTimezoneInfo, h as __vue_normalize__, j as __vue_create_injector__ } from './index-dbaaad42.js';
 import Vue from 'vue';
 import vClickOutside from 'v-click-outside';
 import { createPopper } from '@popperjs/core';
@@ -97,11 +97,11 @@ var script = {
       var popcorn = this.$refs['target'];
       var tooltip = this.$refs['popup'];
       this.popper = createPopper(popcorn, tooltip, {
-        placement: 'right',
+        placement: 'right-start',
         modifiers: [{
           name: 'flip',
           options: {
-            fallbackPlacements: ['top', 'right', 'bottom', 'left']
+            fallbackPlacements: ['top-start', 'right-start', 'bottom-start', 'left-start']
           }
         }]
       });
@@ -190,7 +190,7 @@ var __vue_staticRenderFns__ = [];
 
 var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-1a617b86_0", {
+  inject("data-v-3dc00cc7_0", {
     source: ".event-card{display:flex;flex-direction:column;height:100%;width:100%;z-index:5;color:#fff;user-select:none;will-change:height}.event-card h4,.event-card p{margin:0}.event-card>*{flex:1;position:relative}.event-card.editing{z-index:10}.event-card.creating{z-index:-1}.event-card.overlaps>*{border:solid 1px #fff!important}.event-card__mini .created-event>div>.details-card small{display:none}.event-card__mini .appointment-title,.event-card__mini .time{font-size:9px;height:100%}.event-card__small .appointment-title{font-size:80%}.event-card__small .time{font-size:70%}.event-card.two-in-one .details-card>*{font-size:60%}.event-card.is-flat{margin-bottom:3px}.event-card.is-flat .details-card>small{display:none}.event-card.is-flat .remove{top:1px}.event-card:not(.is-flat){position:absolute;pointer-events:none;top:0;left:0;right:0;bottom:0}.event-card h1,.event-card h2,.event-card h3,.event-card h4,.event-card h5,.event-card h6,.event-card p{margin:0}.time{font-size:11px}.popup-wrapper{text-shadow:none;color:#000;z-index:10;position:absolute;top:0;left:calc(100% + 5px);display:flex;flex-direction:column;pointer-events:all;user-select:none;background-color:#fff;border:solid 1px rgba(0,0,0,.08);border-radius:4px;box-shadow:0 2px 12px -3px rgba(0,0,0,.3);padding:10px}.popup-wrapper h4{color:#000;font-weight:400}.popup-wrapper input,.popup-wrapper textarea{border:none;background-color:#ebebeb;color:#030303;border-radius:4px;padding:5px 8px;margin-bottom:5px}.created-event{pointer-events:all;position:relative}.created-event>.details-card{max-width:100%;width:100%}.created-event>.details-card h2,.created-event>.details-card h3,.created-event>.details-card h4,.created-event>.details-card p,.created-event>.details-card small,.created-event>.details-card span,.created-event>.details-card strong,.created-event>.details-card>h1{text-overflow:ellipsis;overflow:hidden;display:block}ul:nth-last-child(-n+3) .popup-wrapper{left:auto;right:100%;margin-right:10px}.day-view ul .popup-wrapper{left:auto;right:auto;width:calc(100% - 10px);top:10px}",
     map: undefined,
     media: undefined

@@ -84,7 +84,7 @@
   </div>
 </template>
 <script>
-import BaseScrollContainer from "./base/BaseScrollContainer";
+import BaseScrollContainer from "./base/BaseScrollContainer.vue";
 import KalendarDay from "./kalendar-day.vue";
 import myWorker from "@/lib-components/workers";
 import {
