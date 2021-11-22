@@ -968,31 +968,6 @@ var EVENT = {
   userId: null,
   materials: []
 };
-var STUDENTS = {
-  '10001': {
-    name: 'Иванов Сергей'
-  },
-  '20002': {
-    name: 'Петровский Иван'
-  },
-  '30003': {
-    name: 'Академиков Кот'
-  },
-  '40004': {
-    name: 'Дмитриев Иван'
-  }
-};
-var MATERIALS = {
-  '10001': {
-    name: 'Present simple. Правила, примеры + тест.'
-  },
-  '20002': {
-    name: 'Present simple таблица.'
-  },
-  '30003': {
-    name: 'Present simple.'
-  }
-};
 var script$5 = {
   name: "kalendar-popup-card-slot",
   components: {
@@ -1000,16 +975,19 @@ var script$5 = {
     KalendarOpenLesson: __vue_component__$2,
     BaseSelect: __vue_component__$4
   },
+  inject: ['kalendar_materials', 'kalendar_students'],
   props: ['popup_information'],
   data: function data() {
+    var _this = this;
+
     return {
       new_event_data: _objectSpread2({}, EVENT),
       studentSelect: {
         value: {},
-        list: Object.keys(STUDENTS).map(function (m) {
+        list: Object.keys(this.kalendar_students).map(function (m) {
           return {
             value: m,
-            name: STUDENTS[m].name
+            name: _this.kalendar_students[m].name
           };
         }),
         filteredList: [],
@@ -1017,10 +995,10 @@ var script$5 = {
       },
       materialSelect: {
         value: {},
-        list: Object.keys(MATERIALS).map(function (m) {
+        list: Object.keys(this.kalendar_materials).map(function (m) {
           return {
             value: m,
-            name: MATERIALS[m].name
+            name: _this.kalendar_materials[m].name
           };
         }),
         filteredList: [],
@@ -1113,14 +1091,14 @@ var script$5 = {
       this.filterStudents();
     },
     filterStudents: function filterStudents() {
-      var _this = this;
+      var _this2 = this;
 
       this.studentSelect.filteredList = this.studentSelect.list.filter(function (s) {
-        if (_this.addedStudents.length === 0) {
+        if (_this2.addedStudents.length === 0) {
           return true;
         }
 
-        return _this.addedStudents.find(function (addedS) {
+        return _this2.addedStudents.find(function (addedS) {
           return addedS.value === s.value;
         }) === undefined;
       });
@@ -1144,14 +1122,14 @@ var script$5 = {
       this.hideMaterialSelect();
     },
     filterMaterials: function filterMaterials() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.materialSelect.filteredList = this.materialSelect.list.filter(function (s) {
-        if (_this2.addedMaterials.length === 0) {
+        if (_this3.addedMaterials.length === 0) {
           return true;
         }
 
-        return _this2.addedMaterials.find(function (addedS) {
+        return _this3.addedMaterials.find(function (addedS) {
           return addedS.value === s.value;
         }) === undefined;
       });
@@ -1183,22 +1161,22 @@ var script$5 = {
       }
     },
     filterTime: function filterTime(prop) {
-      var _this3 = this;
+      var _this4 = this;
 
       var maxStartTime = this.hourRange[0] * 100;
       var maxEndTime = this.hourRange[1] * 100;
       Object.keys(this.day_events).forEach(function (key) {
-        var eventStartTime = +_this3.getNumHour(_this3.day_events[key][0].start.value); // // 2021-10-22T18:00:00+03:00 => 1800
+        var eventStartTime = +_this4.getNumHour(_this4.day_events[key][0].start.value); // // 2021-10-22T18:00:00+03:00 => 1800
 
-        var eventEndTime = +_this3.getNumHour(_this3.day_events[key][0].end.value); //
+        var eventEndTime = +_this4.getNumHour(_this4.day_events[key][0].end.value); //
 
-        if (eventStartTime <= _this3.start_time_h && eventEndTime <= _this3.start_time_h) {
+        if (eventStartTime <= _this4.start_time_h && eventEndTime <= _this4.start_time_h) {
           if (eventEndTime > maxStartTime) {
             maxStartTime = eventEndTime;
           }
         }
 
-        if (eventStartTime >= _this3.end_time_h && eventEndTime >= _this3.end_time_h) {
+        if (eventStartTime >= _this4.end_time_h && eventEndTime >= _this4.end_time_h) {
           if (eventStartTime < maxEndTime) {
             maxEndTime = eventStartTime;
           }
@@ -1209,16 +1187,16 @@ var script$5 = {
 
         var numHour10 = +h.slice(0, 5).replace(':', ''); // берем время в виде 10:30 и переводим в число 1030
 
-        if (numHour < _this3.hourRange[0] || numHour > _this3.hourRange[1]) {
+        if (numHour < _this4.hourRange[0] || numHour > _this4.hourRange[1]) {
           // убираем часы не попадающие в режим работы day_starts_at и day_ends_at календаря
           return false;
         }
 
-        if (prop === 'start' && numHour10 === _this3.getNumHour(_this3.end_time, 'end')) {
+        if (prop === 'start' && numHour10 === _this4.getNumHour(_this4.end_time, 'end')) {
           return false;
         }
 
-        if (prop === 'end' && numHour10 < _this3.getNumHour(_this3.start_time)) {
+        if (prop === 'end' && numHour10 < _this4.getNumHour(_this4.start_time)) {
           return false;
         }
 
@@ -1523,7 +1501,7 @@ var __vue_staticRenderFns__$5 = [];
 
 var __vue_inject_styles__$5 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-95bc6040_0", {
+  inject("data-v-583d51c3_0", {
     source: ".created-card{display:flex;flex-direction:column;padding:20px 20px 10px 30px;position:relative}.created-card__x{position:absolute;top:0;right:0}.created-card__header{display:flex;align-items:center;margin:0 0 20px 0}.created-card__header-icon{display:inline-block;width:20px;height:20px;margin:0 10px 0 0}.created-card__header-text{font-size:16px;font-weight:600;color:#0967d1;text-transform:uppercase}.b-added-students{display:flex;flex-wrap:wrap;margin:10px 0 0 10px!important}.b-added-students__item{border-right:none!important;margin:0 20px 0 0}.b-added-students__item-x{width:8px;height:8px;display:inline-block;margin:0 7px 0 0;cursor:pointer}.b-buttons{width:100%;display:flex;justify-content:center;margin:10px 0}.b-date-time{display:flex;align-items:center;flex-wrap:nowrap;padding:20px 0}.b-date-time__date{display:inline-block;margin:0 30px 0 0}.b-date-time__date:first-letter{text-transform:uppercase}.b-delimiter{width:50px;display:flex;justify-content:center;align-items:center}.b-delimiter:before{content:\"\";display:inline-block;border-bottom:1px solid #dadada;width:10px}.b-materials__add-button{color:#2089ff;display:flex;align-items:center;background:0 0;border:none;cursor:pointer}.b-materials__add-button>svg{margin:0 9px 0 0}.b-materials__list{display:flex;flex-direction:column;margin:10px 0 0 10px!important}.b-materials__list-item{border-right:none!important;margin:0 20px 0 0}.b-materials__list-item-x{width:8px;height:8px;display:inline-block;margin:0 7px 0 0;cursor:pointer}",
     map: undefined,
     media: undefined
@@ -1549,31 +1527,6 @@ var __vue_component__$5 = /*#__PURE__*/normalizeComponent({
 }, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, createInjector, undefined, undefined);
 
 //
-var STUDENTS$1 = {
-  '10001': {
-    name: 'Иванов Сергей'
-  },
-  '20002': {
-    name: 'Петровский Иван'
-  },
-  '30003': {
-    name: 'Академиков Кот'
-  },
-  '40004': {
-    name: 'Дмитриев Иван'
-  }
-};
-var MATERIALS$1 = {
-  '10001': {
-    name: 'Present simple. Правила, примеры + тест.'
-  },
-  '20002': {
-    name: 'Present simple таблица.'
-  },
-  '30003': {
-    name: 'Present simple.'
-  }
-};
 var script$6 = {
   name: "kalendar-popup-edit-form",
   components: {
@@ -1581,24 +1534,27 @@ var script$6 = {
     KalendarOpenLesson: __vue_component__$2,
     BaseSelect: __vue_component__$4
   },
+  inject: ['kalendar_materials', 'kalendar_students'],
   props: ['popup_information'],
   data: function data() {
+    var _this = this;
+
     return {
       studentSelect: {
-        list: Object.keys(STUDENTS$1).map(function (m) {
+        list: Object.keys(this.kalendar_students).map(function (m) {
           return {
             value: m,
-            name: STUDENTS$1[m].name
+            name: _this.kalendar_students[m].name
           };
         }),
         filteredList: [],
         selected: {}
       },
       materialSelect: {
-        list: Object.keys(MATERIALS$1).map(function (m) {
+        list: Object.keys(this.kalendar_materials).map(function (m) {
           return {
             value: m,
-            name: MATERIALS$1[m].name
+            name: _this.kalendar_materials[m].name
           };
         }),
         filteredList: [],
@@ -1705,14 +1661,14 @@ var script$6 = {
       this.filterStudents();
     },
     filterStudents: function filterStudents() {
-      var _this = this;
+      var _this2 = this;
 
       this.studentSelect.filteredList = this.studentSelect.list.filter(function (s) {
-        if (_this.addedStudents.length === 0) {
+        if (_this2.addedStudents.length === 0) {
           return true;
         }
 
-        return _this.addedStudents.find(function (addedS) {
+        return _this2.addedStudents.find(function (addedS) {
           return addedS.value === s.value;
         }) === undefined;
       });
@@ -1758,14 +1714,14 @@ var script$6 = {
       this.hideMaterialSelect();
     },
     filterMaterials: function filterMaterials() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.materialSelect.filteredList = this.materialSelect.list.filter(function (s) {
-        if (_this2.addedMaterials.length === 0) {
+        if (_this3.addedMaterials.length === 0) {
           return true;
         }
 
-        return _this2.addedMaterials.find(function (addedS) {
+        return _this3.addedMaterials.find(function (addedS) {
           return addedS.value === s.value;
         }) === undefined;
       });
@@ -1788,22 +1744,22 @@ var script$6 = {
       return getFormattedTime(isoDate);
     },
     filterTime: function filterTime(prop) {
-      var _this3 = this;
+      var _this4 = this;
 
       var maxStartTime = this.hourRange[0] * 100;
       var maxEndTime = this.hourRange[1] * 100;
       Object.keys(this.day_events).forEach(function (key) {
-        var eventStartTime = +_this3.getNumHour(_this3.day_events[key][0].start.value); // // 2021-10-22T18:00:00+03:00 => 1800
+        var eventStartTime = +_this4.getNumHour(_this4.day_events[key][0].start.value); // // 2021-10-22T18:00:00+03:00 => 1800
 
-        var eventEndTime = +_this3.getNumHour(_this3.day_events[key][0].end.value); //
+        var eventEndTime = +_this4.getNumHour(_this4.day_events[key][0].end.value); //
 
-        if (eventStartTime <= _this3.start_time_h && eventEndTime <= _this3.start_time_h) {
+        if (eventStartTime <= _this4.start_time_h && eventEndTime <= _this4.start_time_h) {
           if (eventEndTime > maxStartTime) {
             maxStartTime = eventEndTime;
           }
         }
 
-        if (eventStartTime >= _this3.end_time_h && eventEndTime >= _this3.end_time_h) {
+        if (eventStartTime >= _this4.end_time_h && eventEndTime >= _this4.end_time_h) {
           if (eventStartTime < maxEndTime) {
             maxEndTime = eventStartTime;
           }
@@ -1814,16 +1770,16 @@ var script$6 = {
 
         var numHour10 = +h.slice(0, 5).replace(':', ''); // берем время в виде 10:30 и переводим в число 1030
 
-        if (numHour < _this3.hourRange[0] || numHour > _this3.hourRange[1]) {
+        if (numHour < _this4.hourRange[0] || numHour > _this4.hourRange[1]) {
           // убираем часы не попадающие в режим работы day_starts_at и day_ends_at календаря
           return false;
         }
 
-        if (prop === 'start' && numHour10 === _this3.getNumHour(_this3.end_time, 'end')) {
+        if (prop === 'start' && numHour10 === _this4.getNumHour(_this4.end_time, 'end')) {
           return false;
         }
 
-        if (prop === 'end' && numHour10 < _this3.getNumHour(_this3.start_time)) {
+        if (prop === 'end' && numHour10 < _this4.getNumHour(_this4.start_time)) {
           return false;
         }
 
@@ -2210,7 +2166,7 @@ var __vue_staticRenderFns__$6 = [];
 
 var __vue_inject_styles__$6 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-f24b6fc2_0", {
+  inject("data-v-56cb5b34_0", {
     source: ".b-edit-card{display:flex;flex-direction:column;padding:4px 10px 10px 15px;position:relative}.b-edit-card__x{position:relative;right:-10px}.b-edit-card__header{display:flex;justify-content:flex-end;align-items:center;margin:0 0 20px 0}.b-edit-card__header-icon{display:flex;justify-content:center;align-items:center;width:20px;height:20px;margin:0 10px}.b-edit-card__header-icon>span{cursor:pointer}.b-edit-card__header-text{font-size:16px;font-weight:600;color:#0967d1;text-transform:uppercase}.b-added-edit-students{display:flex;flex-wrap:wrap;margin:10px 0 0 0!important}.b-added-edit-students__item{border-right:none!important;margin:0 20px 0 0;display:flex;align-items:center;font-size:16px;color:#0967d1}.b-added-edit-students__item>span{width:20px;height:20px;display:inline-block;margin:0 10px 0 0;background:#0967d1;border-radius:3px}.b-added-students{display:flex;flex-wrap:wrap;margin:10px 0 0 10px!important}.b-added-students__item{border-right:none!important;margin:0 20px 0 0}.b-added-students__item-x{width:8px;height:8px;display:inline-block;margin:0 7px 0 0;cursor:pointer}.b-open-edit-lesson{width:100%;color:#777;display:flex;justify-content:flex-start;align-items:center;margin:0 0 0 25px}.b-open-edit-lesson>button{color:#2089ff;cursor:pointer;border:none;background:0 0}.b-buttons{width:100%;display:flex;justify-content:center;margin:10px 0}.b-date-time{display:flex;align-items:center;flex-wrap:nowrap;padding:10px 0 20px 30px}.b-date-time__date{display:inline-block;margin:0 30px 0 0}.b-date-time__date:first-letter{text-transform:uppercase}.b-delimiter{width:50px;display:flex;justify-content:center;align-items:center}.b-delimiter:before{content:\"\";display:inline-block;border-bottom:1px solid #dadada;width:10px}.b-materials__add-button{color:#2089ff;display:flex;align-items:center;background:0 0;border:none;cursor:pointer}.b-materials__add-button>svg{margin:0 9px 0 0}.b-materials__list{display:flex;flex-direction:column;margin:10px 0 0 30px!important}.b-materials__list-item{border-right:none!important;margin:0 20px 0 0}.b-materials__list-item-x{width:8px;height:8px;display:inline-block;margin:0 7px 0 0;cursor:pointer}.b-before-time{margin:18px 0 10px;display:flex;align-items:center;font-size:14px;color:#333}.b-before-time>svg{margin:0 8px 0 0}",
     map: undefined,
     media: undefined
@@ -2238,10 +2194,10 @@ var __vue_component__$6 = /*#__PURE__*/normalizeComponent({
 var script$7 = {
   components: {
     KalendarMonthview: function KalendarMonthview() {
-      return import('./kalendar-monthview-c3ccd60a.js');
+      return import('./kalendar-monthview-7993d805.js');
     },
     KalendarWeekView: function KalendarWeekView() {
-      return import('./kalendar-weekview-d1edccd5.js');
+      return import('./kalendar-weekview-ca5af351.js');
     },
     KalendarCreatedCardSlot: __vue_component__,
     KalendarPopupCardSlot: __vue_component__$5,
@@ -2268,6 +2224,22 @@ var script$7 = {
     configuration: {
       type: Object,
       required: false,
+      validator: function validator(val) {
+        return _typeof(val) === 'object';
+      }
+    },
+    materials: {
+      required: true,
+      default: function _default() {},
+      type: Object,
+      validator: function validator(val) {
+        return _typeof(val) === 'object';
+      }
+    },
+    students: {
+      required: true,
+      default: function _default() {},
+      type: Object,
       validator: function validator(val) {
         return _typeof(val) === 'object';
       }
@@ -2326,6 +2298,8 @@ var script$7 = {
       kalendar_events: null,
       kalendar_work_hours: {},
       kalendar_work_hours_temp: {},
+      kalendar_materials: {},
+      kalendar_students: {},
       new_appointment: {},
       scrollable: true,
       isEditing: false,
@@ -2408,6 +2382,8 @@ var script$7 = {
     });
     this.kalendar_work_hours = _objectSpread2({}, this.work_time);
     this.kalendar_work_hours_temp = _objectSpread2({}, this.work_time);
+    this.kalendar_materials = _objectSpread2({}, this.materials);
+    this.kalendar_students = _objectSpread2({}, this.students);
 
     if (!this.$kalendar) {
       Vue.prototype.$kalendar = {};
@@ -2469,6 +2445,18 @@ var script$7 = {
       enumerable: true,
       get: function get() {
         return _this4.kalendar_options;
+      }
+    });
+    Object.defineProperty(provider, 'kalendar_materials', {
+      enumerable: true,
+      get: function get() {
+        return _this4.kalendar_materials;
+      }
+    });
+    Object.defineProperty(provider, 'kalendar_students', {
+      enumerable: true,
+      get: function get() {
+        return _this4.kalendar_students;
       }
     });
     return provider;
@@ -2780,7 +2768,7 @@ var __vue_staticRenderFns__$7 = [];
 
 var __vue_inject_styles__$7 = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-2b8d1bce_0", {
+  inject("data-v-a998fce4_0", {
     source: "@import url(https://fonts.googleapis.com/css?family=Rubik:wght@400,600&display=swap);*{box-sizing:border-box;font-family:Rubik,Helvetica,Arial,sans-serif}*{box-sizing:border-box}:after,:before{box-sizing:border-box}html{font-size:10px!important}@media only screen and (max-width:1100px){html{font-size:8px!important}}@media only screen and (max-width:768px){html{font-size:10px!important}}.kalendar-wrapper{font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\",\"Segoe UI Symbol\";--main-color:#ec4d3d;--weekend-color:#f7f7f7;--current-day-color:#7AFFD7;--table-cell-border-color:#e5e5e5;--odd-cell-border-color:#e5e5e5;--hour-row-color:inherit;--dark:#212121;--lightg:#9e9e9e;--card-bgcolor:#04A675;--card-color:white;--max-hours:10;--previous-events:#c6dafc;--previous-text-color:#727d8f;--green:#0abc83;--red:#ec4d3d}.kalendar-wrapper.gstyle{--hour-row-color:#212121;--main-color:#4285f4;--weekend-color:transparent;--table-cell-border-color:#dadada;--odd-cell-border-color:transparent;font-family:\"Google Sans\",Roboto,-apple-system,BlinkMacSystemFont,\"Segoe UI\",Arial,sans-serif}.kalendar-wrapper.gstyle .week-navigator{display:flex;justify-content:space-between;align-items:center;background:#fff;border-bottom:none;padding:20px;color:rgba(0,0,0,.54)}.kalendar-wrapper.gstyle .week-navigator button{color:rgba(0,0,0,.54)}.kalendar-wrapper.gstyle .created-event,.kalendar-wrapper.gstyle .creating-event{background-color:var(--card-bgcolor);color:var(--card-color);text-shadow:none;border-left:none;border-radius:6px;opacity:1;border-bottom:solid 1px rgba(0,0,0,.03);font-size:14px;padding:3px 10px;display:flex;flex-direction:column;justify-content:center;align-items:center}.kalendar-wrapper.gstyle .created-event>*,.kalendar-wrapper.gstyle .creating-event>*{text-shadow:none}.kalendar-wrapper.gstyle .creating-event{color:var(--main-color);background-color:#7affd7;font-size:12px;padding:3px 10px 3px;border-radius:6px;justify-content:center;align-items:flex-start}.kalendar-wrapper.gstyle .creating-event .time{color:var(--main-color);display:flex;align-items:center}.kalendar-wrapper.gstyle .is-past .created-event,.kalendar-wrapper.gstyle .is-past .creating-event{background-color:var(--previous-events);color:var(--previous-text-color)}.kalendar-wrapper.gstyle .created-event{width:100%}.kalendar-wrapper.gstyle .created-event:hover{cursor:pointer;background-color:var(--main-color)}.kalendar-wrapper.gstyle .created-event:hover *{color:#fff}.kalendar-wrapper.gstyle .sticky-top .days{margin-left:0;padding-left:55px}.kalendar-wrapper.gstyle .all-day{display:none}.kalendar-wrapper.gstyle ul.building-blocks.day-1 li.is-an-hour::before{content:\"\";position:absolute;bottom:-1px;left:-10px;width:10px;height:1px;background-color:var(--table-cell-border-color)}.kalendar-wrapper.gstyle .hours,.kalendar-wrapper.gstyle ul.building-blocks li{border-right:solid 1px var(--table-cell-border-color)}.kalendar-wrapper.gstyle .hour-indicator-line>span.line{height:2px;background-color:#db4437}.kalendar-wrapper.gstyle .hour-indicator-line>span.line:before{content:\"\";width:12px;height:12px;display:block;background-color:#db4437;position:absolute;top:-1px;left:0;border-radius:100%}.kalendar-wrapper.gstyle .days{position:relative}.kalendar-wrapper.gstyle .days:before{content:\"\";position:absolute;height:1px;width:55px;left:0;bottom:0}.kalendar-wrapper.gstyle .day-indicator{display:flex;flex-direction:column;align-items:center;color:var(--dark);font-size:13px;padding-left:0;background:#fff}.kalendar-wrapper.gstyle .day-indicator>div{display:flex;flex-direction:column;align-items:center}.kalendar-wrapper.gstyle .day-indicator.is-before{color:#757575}.kalendar-wrapper.gstyle .day-indicator .number-date{margin-left:0;margin-right:0;order:2;font-size:18px;font-weight:600;width:32px;height:32px;border-radius:100%;align-items:center;justify-content:center;display:flex;margin-top:4px}.kalendar-wrapper.gstyle .day-indicator.today{border-bottom-color:var(--table-cell-border-color)}.kalendar-wrapper.gstyle .day-indicator.today:after{display:none}.kalendar-wrapper.gstyle .day-indicator.today .number-date{background-color:var(--main-color);color:#fff}.kalendar-wrapper.gstyle .day-indicator .letters-date{margin-left:0;margin-right:0;font-weight:500;text-transform:uppercase;font-size:11px}.kalendar-wrapper.gstyle .day-indicator:first-child{position:relative}.kalendar-wrapper.gstyle .day-indicator:first-child::before{content:\"\";position:absolute;left:-1px;top:0;width:1px;height:100%}.kalendar-wrapper.gstyle .creating-event{border-radius:10px;box-shadow:0 2px 2px rgba(0,0,0,.25);transition:opacity .1s linear}.kalendar-wrapper.gstyle .popup-wrapper{width:400px;min-height:116px;box-shadow:0 4px 4px rgba(0,0,0,.25);transition:opacity .1s linear}.kalendar-wrapper.non-desktop .building-blocks{pointer-events:none}.kalendar-wrapper.day-view .day-indicator{align-items:flex-start;text-align:center;padding-left:10px}.created-event,.creating-event{padding:4px 6px;cursor:default;word-break:break-word;height:100%;width:100%;font-size:14px}.created-event h4,.creating-event h4{font-weight:400}.creating-event{background-color:#34aadc;opacity:.9}.creating-event>*{text-shadow:0 0 7px rgba(0,0,0,.25)}.created-event{background-color:#bfecff;opacity:.74;border-left:solid 3px #34aadc;color:#1f6570}.week-navigator{display:flex;align-items:center;background:linear-gradient(#fdfdfd,#f9f9f9);border-bottom:solid 1px #ec4d3d;padding:10px 20px}.week-navigator .nav-wrapper{display:flex;align-items:center;justify-content:space-between;font-size:22px}.week-navigator .nav-wrapper span{white-space:nowrap;line-height:1.6;color:#333}.week-navigator button{background:0 0;border:none;display:inline-flex;margin:0 10px;color:#ec4d3d;align-items:center;font-size:14px;cursor:pointer;padding:0}.kalendar-wrapper{background-color:#fff;min-width:300px}.no-scroll{overflow-y:hidden;max-height:100%}.hour-indicator-line{position:absolute;z-index:10;width:100%;height:10px;display:flex;align-items:center;pointer-events:none;user-select:none;margin:0 0 0 -1px}.hour-indicator-line>span.line{background-color:var(--main-color);height:1px;display:block;flex:1}.hour-indicator-line>span.time-value{font-size:14px;width:48px;color:var(--main-color);font-weight:600;background-color:#fff}.hour-indicator-tooltip{position:absolute;z-index:0;background-color:var(--main-color);width:10px;height:10px;display:block;border-radius:100%;pointer-events:none;user-select:none}ul.kalendar-day li.kalendar-cell:last-child{display:none}.week-navigator-button{outline:0}.week-navigator-button:active svg,.week-navigator-button:hover svg{stroke:var(--main-color)}.gstyle .week-navigator-button{width:32px;height:32px;display:flex;justify-content:center;align-items:center;border:2px solid var(--main-color);border-radius:100%;transition:all .2s}.gstyle .week-navigator-button svg{position:relative;left:1px;stroke:var(--main-color)}.gstyle .week-navigator-button:hover{border:2px solid #fff;background:var(--main-color)}.gstyle .week-navigator-button:hover svg{stroke:#fff}.kalendar-header{display:flex;justify-content:space-between;align-items:center}.kalendar-header>div{display:flex;justify-content:space-between;align-items:center}.main-button{padding:11px 42px;background:#2089ff;box-shadow:5px 5px 15px rgba(0,0,0,.15);border-radius:10px;margin:0 5px;cursor:pointer;border:none;color:#fff}.main-button:active{box-shadow:inset 5px 5px 15px rgba(0,0,0,.15)}.main-button.--gray{background:var(--green)}.main-button.--red{background:var(--red)}.button-today{margin:0 20px 0 0}",
     map: undefined,
     media: undefined
