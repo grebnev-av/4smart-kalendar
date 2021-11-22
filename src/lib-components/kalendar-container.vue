@@ -215,6 +215,22 @@ export default {
                 return typeof val === 'object';
             },
         },
+        materials: {
+          required: true,
+          default: () => {},
+          type: Object,
+          validator: function(val) {
+            return typeof val === 'object';
+          },
+        },
+        students: {
+          required: true,
+          default: () => {},
+          type: Object,
+          validator: function(val) {
+            return typeof val === 'object';
+          },
+        },
     },
     data() {
         return {
@@ -267,6 +283,8 @@ export default {
             kalendar_events: null,
             kalendar_work_hours: {},
             kalendar_work_hours_temp: {},
+            kalendar_materials: {},
+            kalendar_students: {},
             new_appointment: {},
             scrollable: true,
             isEditing: false,
@@ -320,6 +338,8 @@ export default {
 
         this.kalendar_work_hours = {...this.work_time};
         this.kalendar_work_hours_temp = {...this.work_time};
+        this.kalendar_materials = {...this.materials};
+        this.kalendar_students = {...this.students};
 
         if (!this.$kalendar) {
             Vue.prototype.$kalendar = {};
@@ -383,6 +403,14 @@ export default {
         Object.defineProperty(provider, 'kalendar_options', {
             enumerable: true,
             get: () => this.kalendar_options,
+        });
+        Object.defineProperty(provider, 'kalendar_materials', {
+          enumerable: true,
+          get: () => this.kalendar_materials,
+        });
+        Object.defineProperty(provider, 'kalendar_students', {
+          enumerable: true,
+          get: () => this.kalendar_students,
         });
         return provider;
     },

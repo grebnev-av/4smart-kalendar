@@ -195,31 +195,6 @@ const EVENT = {
   userId: null,
   materials: []
 };
-const STUDENTS = {
-  '10001': {
-    name: 'Иванов Сергей'
-  },
-  '20002': {
-    name: 'Петровский Иван'
-  },
-  '30003': {
-    name: 'Академиков Кот'
-  },
-  '40004': {
-    name: 'Дмитриев Иван'
-  }
-}
-const MATERIALS = {
-  '10001': {
-    name: 'Present simple. Правила, примеры + тест.'
-  },
-  '20002': {
-    name: 'Present simple таблица.'
-  },
-  '30003': {
-    name: 'Present simple.'
-  }
-}
 
 export default {
   name: "kalendar-popup-edit-form",
@@ -228,16 +203,17 @@ export default {
     KalendarOpenLesson,
     BaseSelect
   },
+  inject: ['kalendar_materials', 'kalendar_students'],
   props: ['popup_information'],
   data () {
     return {
       studentSelect: {
-        list: Object.keys(STUDENTS).map(m => ({ value: m, name: STUDENTS[m].name})),
+        list: Object.keys(this.kalendar_students).map(m => ({ value: m, name: this.kalendar_students[m].name})),
         filteredList: [],
         selected: {}
       },
       materialSelect: {
-        list: Object.keys(MATERIALS).map(m => ({ value: m, name: MATERIALS[m].name})),
+        list: Object.keys(this.kalendar_materials).map(m => ({ value: m, name: this.kalendar_materials[m].name})),
         filteredList: [],
         selected: {}
       },

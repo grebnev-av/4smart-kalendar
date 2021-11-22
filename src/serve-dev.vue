@@ -4,6 +4,8 @@
 			:configuration="calendar_settings" 
 			:events.sync="events"
 			:work_time.sync="work_time"
+			:materials.sync="materials"
+			:students.sync="students"
 		>
 			<div slot="workTimeEdit">
 				<button class="main-button" @click="addWorkTime()" v-if="!calendar_settings.working_hours">
@@ -25,38 +27,35 @@
 	</div>
 </template>
 <script>
-
-const _existing_events = [
-	// {
-	// 	from: '2021-10-07T04:00:00.300Z',
-	// 	to: '2021-10-08T04:10:00.300Z',
-	// 	data: {
-	// 		title: 'Right now',
-	// 		description: 'Lorem ipsum',
-  //     students: [],
-  //     materials: [],
-	// 	},
-	// },
-	// {
-	// 	from: '2019-07-11T10:22:00-07:00.000Z',
-	// 	to: '2019-07-31T11:55:00-07:00.000Z',
-	// 	data: {
-	// 		title: 'Truth',
-	// 		description: 'Look.',
-  //     students: [],
-  //     materials: [],
-	// 	},
-	// },
-	// {
-	// 	from: '2019-07-11T10:22:00-07:00.000Z',
-	// 	to: '2019-07-31T11:20:00-07:00.000Z',
-	// 	data: {
-	// 		title: 'Side',
-	// 		description: 'Look.2',
-  //     students: [],
-  //     materials: [],
-	// 	},
-	// },
+const STUDENTS = {
+  '10001': {
+    name: 'Иванов Сергей'
+  },
+  '20002': {
+    name: 'Петровский Иван'
+  },
+  '30003': {
+    name: 'Академиков Кот'
+  },
+  '40004': {
+    name: 'Дмитриев Иван'
+  }
+}
+const MATERIALS = {
+  '10001': {
+    name: 'Present simple. Правила, примеры + тест.'
+  },
+  '20002': {
+    name: 'Present simple таблица.'
+  },
+  '30003': {
+    name: 'Present simple.'
+  },
+  '40004': {
+    name: 'Еще какой-то материал для урока.'
+  }
+}
+const _EVENTS = [
 	{
 		from: '2019-06-11T10:00:00.000Z',
 		to: '2019-06-11T12:00:00.000Z',
@@ -72,14 +71,14 @@ const _existing_events = [
 	},
 ];
 
-const _existing_working_hours = {
+const WORKING_HOURS = {
 	'2021-10-05T07:00:00.000Z': '',
 	'2021-10-05T07:30:00.000Z': ''
 }
 
 let today = new Date();
 // change the dates on _existing events to this week
-const startDate = new Date(_existing_events[0].from).getUTCDate();
+const startDate = new Date(_EVENTS[0].from).getUTCDate();
 
 function makeNow(dateString) {
 	const d = new Date(dateString);
@@ -88,7 +87,7 @@ function makeNow(dateString) {
 	d.setDate(today.getUTCDate() + (d.getUTCDate() - startDate));
 	return d.toISOString();
 }
-const existing_events = _existing_events.map(ev => ({
+const EVENTS = _EVENTS.map(ev => ({
 	...ev,
 	from: makeNow(ev.from),
 	to: makeNow(ev.to),
@@ -101,8 +100,10 @@ export default {
 	},
 	data() {
 		return {
-			events: existing_events,
-			work_time: _existing_working_hours,
+			events: EVENTS,
+			work_time: WORKING_HOURS,
+      materials: MATERIALS,
+      students: STUDENTS,
 			calendar_settings: {
 				view_type: 'week',
 				cell_height: 30,
