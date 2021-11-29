@@ -497,11 +497,12 @@ export default {
     border-right: none !important;
     margin: 0 20px 0 0;
     display: flex;
-    align-items: center;
     font-size: 16px;
     color: #0967D1;
+    word-break: break-word;
     & > span {
       width: 20px;
+      min-width: 20px;
       height: 20px;
       display: inline-block;
       margin: 0 10px 0 0;
@@ -517,6 +518,7 @@ export default {
   &__item {
     border-right: none !important;
     margin: 0 20px 0 0;
+    word-break: break-word;
     &-x {
       width: 8px;
       height: 8px;
@@ -594,8 +596,10 @@ export default {
     &-item {
       border-right: none !important;
       margin: 0 20px 0 0;
+      word-break: break-word;
       &-x {
         width: 8px;
+        min-width: 8px;
         height: 8px;
         display: inline-block;
         margin: 0 7px 0 0;

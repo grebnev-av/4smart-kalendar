@@ -201,6 +201,10 @@ $creator-content: white;
         border: solid 1px white !important;
     }
 
+  .appointment-title {
+    max-height: 80%;
+  }
+
     &__mini {
         .created-event > div > .details-card  small  {
             display: none;
@@ -209,13 +213,16 @@ $creator-content: white;
         .appointment-title,
         .time {
             font-size: 9px;
-            height: 100%;
+            max-height: 50%;
+            white-space: nowrap;
         }
     }
 
     &__small {
         .appointment-title {
             font-size: 80%;
+            white-space: nowrap;
+            max-height: 50%;
         }
 
         .time {

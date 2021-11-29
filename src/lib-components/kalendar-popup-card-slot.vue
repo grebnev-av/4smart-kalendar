@@ -469,6 +469,7 @@ export default {
     &-item {
       border-right: none !important;
       margin: 0 20px 0 0;
+      word-break: break-word;
       &-x {
         width: 8px;
         height: 8px;

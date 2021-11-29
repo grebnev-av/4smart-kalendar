@@ -202,6 +202,7 @@ export default {
       list-style: none
       color: #272727
       transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0)
+      word-break: break-word
       &._fixed
         // position: absolute
         top: 0
