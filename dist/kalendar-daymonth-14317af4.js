@@ -1,4 +1,4 @@
-import { k as isWeekend, l as isToday, n as cloneObject, h as __vue_normalize__, j as __vue_create_injector__ } from './index-9ad976ad.js';
+import { k as isWeekend, l as isToday, n as cloneObject, h as __vue_normalize__, j as __vue_create_injector__ } from './index-50eec01b.js';
 import 'vue';
 import { m as myWorker } from './index-d71cc8ae.js';
 
@@ -7,7 +7,7 @@ var script = {
   name: "kalendar-daymonth",
   components: {
     KalendarEvent: function KalendarEvent() {
-      return import('./kalendar-event-f05f653d.js');
+      return import('./kalendar-event-e3c592a1.js');
     }
   },
   props: ["day", "passedTime"],

@@ -1,2 +1,2 @@
-export { _ as Kalendar, p as default } from './index-9ad976ad.js';
+export { _ as Kalendar, p as default } from './index-50eec01b.js';
 import 'vue';
