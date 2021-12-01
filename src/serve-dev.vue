@@ -96,7 +96,7 @@ const EVENTS = _EVENTS.map(ev => ({
 	to: makeNow(ev.to),
 }));
 import Kalendar from '@/lib-components/kalendar-container.vue';
-
+import BaseSelect from '@/lib-components/base/BaseSelect'
 export default {
 	components: {
 		Kalendar,
@@ -108,7 +108,7 @@ export default {
       materials: MATERIALS,
       students: STUDENTS,
 			calendar_settings: {
-				view_type: 'week',
+				view_type: 'month',
 				cell_height: 30,
 				scrollToNow: true,
 				//start_day: getCurrentDay(),
@@ -121,7 +121,7 @@ export default {
 				hide_dates: ['2019-08-09'],
 				hide_days: [],
 				past_event_creation: true,
-			}
+			},
 		};
 	},
 	methods: {
@@ -142,7 +142,10 @@ export default {
 		cancelWorkTime() {
 			this.changeWorkTime()
 			this.$kalendar.cancelWorkHours()
-		}
+		},
+    changeViewType () {
+
+    }
 	},
 };
 </script>

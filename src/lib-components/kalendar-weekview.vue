@@ -163,6 +163,11 @@ export default {
       return {distance, time};
     }
   },
+  watch: {
+    'kalendar_options.view_type'() {
+      this.constructWeek()
+    }
+  },
   methods: {
     _isToday(day) {
       return isToday(day);

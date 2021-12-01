@@ -101,10 +101,20 @@
                     </div>
                 </div>
             </div>
+            <slot name="viewType">
+              <base-select
+                  :options="viewType.list"
+                  v-model="viewType.selected"
+                  @input="changeViewType(viewType.selected)"
+              />
+            </slot>
             <slot name="workTimeEdit"></slot>
         </div>
 
-        <kalendar-monthview v-if="kalendar_options.view_type === 'month'" :current_day="current_day" />
+        <kalendar-monthview
+            v-if="kalendar_options.view_type === 'month'"
+            :current_day="current_day"
+        />
         <kalendar-week-view
             v-else
             :kalendar_work_hours="kalendar_work_hours"
@@ -168,7 +178,7 @@ import Vue from 'vue';
 import KalendarCreatedCardSlot from '@/lib-components/kalendar-created-card-slot';
 import KalendarPopupCardSlot from '@/lib-components/kalendar-popup-card-slot';
 import KalendarPopupEditForm from '@/lib-components/kalendar-popup-edit-form';
-
+import BaseSelect from '@/lib-components/base/BaseSelect'
 import {
     addDays,
     getTime,
@@ -188,7 +198,8 @@ export default {
       KalendarWeekView: () => import('./kalendar-weekview.vue'),
       KalendarCreatedCardSlot,
       KalendarPopupCardSlot,
-      KalendarPopupEditForm
+      KalendarPopupEditForm,
+      BaseSelect
     },
     props: {
         // this provided array will be kept in sync
@@ -278,7 +289,7 @@ export default {
                 },
                 toggleEditPopup: (value) => {
                   this.isShowEditPopup = value
-                }
+                },
             },
             kalendar_events: null,
             kalendar_work_hours: {},
@@ -286,6 +297,14 @@ export default {
             kalendar_materials: {},
             kalendar_students: {},
             new_appointment: {},
+            viewType: {
+              list: [
+                { name: 'Месяц', value: 'month'},
+                { name: 'Неделя', value: 'week'},
+                { name: 'День', value: 'day'},
+              ],
+              selected: { name: 'Месяц', value: 'month'},
+            },
             scrollable: true,
             isEditing: false,
             isShowEditPopup: false,
@@ -404,6 +423,10 @@ export default {
             enumerable: true,
             get: () => this.kalendar_options,
         });
+        Object.defineProperty(provider, 'kalendar_events', {
+            enumerable: true,
+            get: () => this.kalendar_events,
+        });
         Object.defineProperty(provider, 'kalendar_materials', {
           enumerable: true,
           get: () => this.kalendar_materials,
@@ -462,6 +485,9 @@ export default {
             id: kalendarEvent.id,
           });
         },
+        changeViewType(value){
+          this.$kalendar.options.view_type = value.value
+        }
     },
 };
 </script>
